@@ -1,0 +1,30 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+<div id="calendar"></div>
+
+<div id="eventPopUp" style="display: none" title="Ny begivenhed">
+    <form id="eventForm">
+        <fieldset>
+            <label>Title</label><br />
+            <input type="text" id="eventTitle"/><br />
+            <label>Dato</label><br/>
+            <input type="text" id="eventDate"/><br />
+            <label>Start tid</label><br />
+            <input type="text" id="eventStartTime"/><br />
+            <label>Længde (minuter)</label><br />
+            <input type="text" id="eventEndTime"/><br />
+            <label>Virksomhed</label><br />
+            <input type="text" id="eventCompany"/><br />
+            <label>Medarbejder</label><br />
+            <input type="text" id="eventEmployee"/><br />
+            <label>Note</label><br />
+            <textarea id="eventNote"></textarea>
+        </fieldset>
+    </form>
+</div>
+
+@section Scripts{
+    <script src="~/Scripts/Calendar/calendar.js"></script>
+}
