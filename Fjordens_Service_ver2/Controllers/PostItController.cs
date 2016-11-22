@@ -40,6 +40,42 @@ namespace Fjordens_Service_ver2.Controllers
             return Json(rows, JsonRequestBehavior.AllowGet);
         }
 
+        public JsonResult DelPostIt(int id)
+        {
+            using (IPostItRepository _postItRepo = new PostItRepository(ApplicationDbContext.Create()))
+            {
+                _postItRepo.Delete(id);
+                _postItRepo.Save();
+                return Json(true);
+            }
+        }
+
+        public JsonResult UpdatePostIt(PostItHelpModel postItHelpModel)
+        {
+            if (ModelState.IsValid)
+            {
+                using (PostItRepository _postItRepo = new PostItRepository(ApplicationDbContext.Create()))
+                using (CustomerRepository _customerRepository = new CustomerRepository(ApplicationDbContext.Create()))
+                using (EmployeeRepository _employeeRepository = new EmployeeRepository(ApplicationDbContext.Create()))
+                {
+                    var customerId = _customerRepository.FindByName(postItHelpModel.customer).CustomerId;
+                    var employeeId = _employeeRepository.FindByName(postItHelpModel.employee).EmployeeId;
+                    PostIt postIt = _postItRepo.Find(postItHelpModel.id);
+                    postIt.Title = postItHelpModel.title;
+                    postIt.From = postItHelpModel.start;
+                    postIt.To = postItHelpModel.end;
+                    postIt.CustomerId = customerId;
+                    postIt.EmployeeId = employeeId;
+                    postIt.Note = postItHelpModel.note;
+                    _postItRepo.Update(postIt);
+                    _postItRepo.Save();
+                    return Json(true);
+                }
+            }
+            return Json(false);
+           
+        }
+
         public JsonResult CreatePostIt(PostItHelpModel postItHelpModel)
         {
             if (ModelState.IsValid)

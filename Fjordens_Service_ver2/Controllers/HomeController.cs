@@ -1,5 +1,8 @@
-﻿using Fjordens_Service_ver2.Models;
+﻿using Fjordens_Service_ver2.DAL.Contracts;
+using Fjordens_Service_ver2.DAL.Repositories;
+using Fjordens_Service_ver2.Models;
 using Fjordens_Service_ver2.Utils;
+using Fjordens_Service_ver2.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +15,17 @@ namespace Fjordens_Service_ver2.Controllers
     {
         public ActionResult Index()
         {
-            return View();
+            HomeViewModel viewModel = null;
+            using (ICustomerRepository _customerRepo = new CustomerRepository(ApplicationDbContext.Create()))
+            using (IEmployeeRepository _employeeRepo = new EmployeeRepository(ApplicationDbContext.Create()))
+            {
+                viewModel = new HomeViewModel()
+                {
+                    Customers = _customerRepo.All().ToList(),
+                    Employees = _employeeRepo.All().ToList()
+                };
+            }
+            return View(viewModel);
         }
 
         public JsonResult LoadEvents(string start, string end)

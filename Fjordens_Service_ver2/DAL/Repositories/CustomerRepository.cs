@@ -18,7 +18,10 @@ namespace Fjordens_Service_ver2.DAL.Repositories
         {
             _context = context;
         }
-
+        public IQueryable<Customer> All()
+        {
+            return _context.Customers;
+        }
         public IQueryable<Customer> AllIncluding(params Expression<Func<Customer, object>>[] includeProperties)
         {
             return includeProperties.Aggregate<Expression<Func<Customer, object>>,
@@ -76,5 +79,7 @@ namespace Fjordens_Service_ver2.DAL.Repositories
             Dispose(true);
             GC.SuppressFinalize(this);
         }
+
+
     }
 }

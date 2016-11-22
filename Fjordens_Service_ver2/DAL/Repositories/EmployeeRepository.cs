@@ -18,6 +18,10 @@ namespace Fjordens_Service_ver2.DAL.Repositories
         {
             _context = context;
         }
+        public IQueryable<Employee> All()
+        {
+            return _context.Employees;
+        }
 
         public IQueryable<Employee> AllIncluding(params Expression<Func<Employee, object>>[] includeProperties)
         {
@@ -76,5 +80,7 @@ namespace Fjordens_Service_ver2.DAL.Repositories
             Dispose(true);
             GC.SuppressFinalize(this);
         }
+
+
     }
 }

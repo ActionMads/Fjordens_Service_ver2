@@ -10,6 +10,7 @@ namespace Fjordens_Service_ver2.DAL.Contracts
 {
     interface IEmployeeRepository : IDisposable
     {
+        IQueryable<Employee> All();
         IQueryable<Employee> AllIncluding(params Expression<Func<Employee, object>>[] includeProperties);
         Employee Find(int id);
         void Insert(Employee employee);

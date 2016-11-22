@@ -10,6 +10,7 @@ namespace Fjordens_Service_ver2.DAL.Contracts
 {
     interface ICustomerRepository : IDisposable
     {
+        IQueryable<Customer> All();
         IQueryable<Customer> AllIncluding(params Expression<Func<Customer, object>>[] includeProperties);
         Customer Find(int id);
         void Insert(Customer customer);

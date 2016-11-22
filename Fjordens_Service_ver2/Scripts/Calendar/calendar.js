@@ -9,11 +9,22 @@
 }
 
 function updateEvent(postItHelpModel) {
-
+    $.ajax({
+        type: "Post",
+        url: "/PostIt/UpdatePostIt",
+        dataType: "json",
+        contentType: "application/json",
+        data: JSON.stringify(postItHelpModel)
+    });
 }
 
 function deleteEvent(id) {
-
+    $.ajax({
+        url: "/PostIt/DelPostIt",
+        dataType: "json",
+        contentType: "application/json",
+        data: {id: id}
+    });
 }
 
 function closeForm() {
@@ -21,23 +32,26 @@ function closeForm() {
     $("#eventForm")[0].reset();
 }
 
-function openEditEventPopup() {
+function openEditEventPopup(id) {
     $("#eventPopUp").dialog({
         height: 500,
         width: 400,
         modal: true,
         title: "Opdater begivenhed",
         buttons: {
-            "Delete": function(){
-                $(this).dialog("close");
+            "Delete": function () {
+                console.log(id);
+                deleteEvent(id);
+                closeForm();
             },
             "Gem": function () {
                 var postItHelpModel = {
+                    "id": id,
                     "title": $("#eventTitle").val(),
-                    "start": $("#eventDate").val() + " " + $("#eventStartTime").val(),
-                    "end": $("#eventDate").val() + " " + $("#eventEndTime").val(),
-                    "customer": $("#eventCompany").val(),
-                    "employee": $("#eventEmployee").val(),
+                    "start": moment($("#eventDate").val() + " " + $("#eventStartTime").val(), "DD/MM/YYYY HH:mm"),
+                    "end": moment($("#eventDate").val() + " " + $("#eventEndTime").val(), "DD/MM/YYYY HH:mm"),
+                    "customer": $("#customersList option:selected").text(),
+                    "employee": $("#employeesList option:selected").text(),
                     "note": $("#eventNote").val()
                 }
                 updateEvent(postItHelpModel);
@@ -61,10 +75,10 @@ function openCreateEventPopup() {
             "Gem": function () {
                 var postItHelpModel = {
                     "title": $("#eventTitle").val(),
-                    "start": moment($("#eventDate").val() +" "+ $("#eventStartTime").val(), "dd/MM/YYYY HH:mm"),
-                    "end": moment($("#eventDate").val() +" "+ $("#eventEndTime").val(), "dd/MM/YYYY HH:mm"),
-                    "customer": $("#eventCompany").val(),
-                    "employee": $("#eventEmployee").val(),
+                    "start": moment($("#eventDate").val() +" "+ $("#eventStartTime").val(), "DD/MM/YYYY HH:mm"),
+                    "end": moment($("#eventDate").val() +" "+ $("#eventEndTime").val(), "DD/MM/YYYY HH:mm"),
+                    "customer": $("#customersList option:selected").text(),
+                    "employee": $("#employeesList option:selected").text(),
                     "note": $("#eventNote").val()
                 }
                 console.log(postItHelpModel)
@@ -79,6 +93,8 @@ function openCreateEventPopup() {
 }
 
 $(function () {
+    
+
     $("#calendar").fullCalendar({
         header: {
             left: "prev,next, today",
@@ -92,22 +108,26 @@ $(function () {
         slotMinutes: 15,
         events: "/PostIt/GetPostIts/",
         dayClick: function (date, jsEvent, view) {
-            $('#eventDate').val(moment(date).format('dd/MM/YYYY'));
+            $('#eventDate').val(moment(date).format('DD/MM/YYYY'));
             $('#eventStartTime').val(moment(date).format('HH:mm'));
             openCreateEventPopup();
             console.log("day clicked!");
         },
         eventClick: function (calEvent, jsEvent, view) {
             $("#eventTitle").val(calEvent.title);
-            $('#eventDate').val(moment(calEvent.start).format('dd/MM/YYYY'));
+            $('#eventDate').val(moment(calEvent.start).format('DD/MM/YYYY'));
             $('#eventStartTime').val(moment(calEvent.start).format('HH:mm'));
             $("#eventEndTime").val(moment(calEvent.end).format("HH:mm"));
-            openEditEventPopup();
+            $("#customersList").val(calEvent.customer);
+            $("#employeesList").val(calEvent.employee);
+            $("#eventNote").val(calEvent.note);
+            openEditEventPopup(calEvent.id);
             console.log("event clicked!");
         },
         eventRender: function (event, element) {
             element.attr("title", event.note);
         }
     });
+    $("#eventDate").datepicker();
 });
 
