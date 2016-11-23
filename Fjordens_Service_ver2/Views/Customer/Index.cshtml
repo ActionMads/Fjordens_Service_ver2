@@ -1,0 +1,23 @@
+﻿@model Fjordens_Service_ver2.ViewModels.CustomersViewModel
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Kunder</h2>
+@Html.ActionLink("Opret", "Create", "Employee")
+@foreach(var customer in Model.Customers)
+{
+    <hr />
+    <div>
+        <h3>@customer.Company</h3>
+        @Html.ActionLink("Rediger", "Edit", "Customer", new { id = customer.CustomerId}, null)
+        <h4>Info</h4>
+        <label>Adresse: </label><label>@customer.Address</label><br />
+        <label>Email: </label><label>@customer.Email</label><br />
+        <label>Telefon: </label><label>@customer.PhoneNumber</label><br />
+        <label>Kontakt Person: </label><label>@customer.ContactPerson</label>
+        <h4>Opgaver</h4>
+        <p>@customer.Tasks</p>
+    </div>
+}

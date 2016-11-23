@@ -1,0 +1,13 @@
+﻿
+@{
+    ViewBag.Title = "Create";
+}
+
+<h2>"Opret kunde"</h2>
+
+@using (Html.BeginForm("Create", "Customer", FormMethod.Post))
+{
+    @Html.Partial("_CustomerPartial")
+
+    <input type="submit" value="Gem"/>
+}

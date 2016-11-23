@@ -62,8 +62,8 @@ namespace Fjordens_Service_ver2.Controllers
                 start = DateTime.Now.AddDays(1).ToString("s"),
                 end = DateTime.Now.AddDays(1).AddMinutes(55).ToString("s"),
                 allDay = false,
-                employee = "Mads",
-                customer = "John",
+                employeeId = 1,
+                customerId = 1,
                 note = "This is just a test"
             };
 

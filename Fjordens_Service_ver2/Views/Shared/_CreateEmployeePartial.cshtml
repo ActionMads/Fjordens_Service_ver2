@@ -1,0 +1,24 @@
+﻿@model Fjordens_Service_ver2.Models.Employee
+
+<div>
+    <div>
+        @Html.Label("Fornavn")
+        @Html.TextBoxFor(m => m.FirstName)
+    </div>
+    <div>
+        @Html.Label("Efternavn")
+        @Html.TextBoxFor(m => m.LastName)
+    </div>
+    <div>
+        @Html.Label("Addresse")
+        @Html.TextBoxFor(m => m.Address)
+    </div>
+    <div>
+        @Html.Label("Email")
+        @Html.TextBoxFor(m => m.Email)
+    </div>
+    <div>
+        @Html.Label("Telefon")
+        @Html.TextBoxFor(m => m.PhoneNumber)
+    </div>
+</div>

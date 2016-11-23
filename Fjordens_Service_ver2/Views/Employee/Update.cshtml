@@ -1,0 +1,14 @@
+﻿@model Fjordens_Service_ver2.Models.Employee
+
+@{
+    ViewBag.Title = "Update";
+}
+
+<h2>Rediger</h2>
+
+@using (Html.BeginForm("Update", "Employee", FormMethod.Post))
+{
+    @Html.HiddenFor(m => m.EmployeeId)
+    @Html.Partial("_CreateEmployeePartial", Model)
+    <input type="submit" value="Gem"/>
+}

@@ -33,6 +33,8 @@ function closeForm() {
 }
 
 function openEditEventPopup(id) {
+    console.log($("#customersList").val());
+    console.log($("#employeesList").val());
     $("#eventPopUp").dialog({
         height: 500,
         width: 400,
@@ -50,8 +52,8 @@ function openEditEventPopup(id) {
                     "title": $("#eventTitle").val(),
                     "start": moment($("#eventDate").val() + " " + $("#eventStartTime").val(), "DD/MM/YYYY HH:mm"),
                     "end": moment($("#eventDate").val() + " " + $("#eventEndTime").val(), "DD/MM/YYYY HH:mm"),
-                    "customer": $("#customersList option:selected").text(),
-                    "employee": $("#employeesList option:selected").text(),
+                    "customerId": $("#customersList").val(),
+                    "employeeId": $("#employeesList").val(),
                     "note": $("#eventNote").val()
                 }
                 updateEvent(postItHelpModel);
@@ -77,8 +79,8 @@ function openCreateEventPopup() {
                     "title": $("#eventTitle").val(),
                     "start": moment($("#eventDate").val() +" "+ $("#eventStartTime").val(), "DD/MM/YYYY HH:mm"),
                     "end": moment($("#eventDate").val() +" "+ $("#eventEndTime").val(), "DD/MM/YYYY HH:mm"),
-                    "customer": $("#customersList option:selected").text(),
-                    "employee": $("#employeesList option:selected").text(),
+                    "customerId": $("#customersList").val(),
+                    "employeeId": $("#employeesList").val(),
                     "note": $("#eventNote").val()
                 }
                 console.log(postItHelpModel)
@@ -110,6 +112,8 @@ $(function () {
         dayClick: function (date, jsEvent, view) {
             $('#eventDate').val(moment(date).format('DD/MM/YYYY'));
             $('#eventStartTime').val(moment(date).format('HH:mm'));
+            $("#customersList select").val(0);
+            $("#employeesList select").val(0);
             openCreateEventPopup();
             console.log("day clicked!");
         },
@@ -118,8 +122,8 @@ $(function () {
             $('#eventDate').val(moment(calEvent.start).format('DD/MM/YYYY'));
             $('#eventStartTime').val(moment(calEvent.start).format('HH:mm'));
             $("#eventEndTime").val(moment(calEvent.end).format("HH:mm"));
-            $("#customersList").val(calEvent.customer);
-            $("#employeesList").val(calEvent.employee);
+            $("#customersList select").val(calEvent.customerId);
+            $("#employeesList select").val(calEvent.employeeId);
             $("#eventNote").val(calEvent.note);
             openEditEventPopup(calEvent.id);
             console.log("event clicked!");

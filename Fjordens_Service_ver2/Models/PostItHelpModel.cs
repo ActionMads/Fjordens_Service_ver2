@@ -17,9 +17,9 @@ namespace Fjordens_Service_ver2.Models
 
         public bool allDay { get; set; }
 
-        public string employee { get; set; }
+        public int employeeId { get; set; }
 
-        public string customer { get; set; }
+        public int customerId { get; set; }
 
         public string note { get; set; }
     }

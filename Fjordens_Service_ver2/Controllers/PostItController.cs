@@ -29,8 +29,8 @@ namespace Fjordens_Service_ver2.Controllers
                         start = string.Format(postIt.From, "s"),
                         end = string.Format(postIt.To, "s"),
                         note = postIt.Note,
-                        customer = _customerRepository.Find(postIt.CustomerId).Company,
-                        employee = _employeeRepository.Find(postIt.EmployeeId).FirstName,
+                        customerId = postIt.CustomerId,
+                        employeeId = postIt.EmployeeId,
                         allDay = false
                     };
                     postItHelpModels.Add(postItHelpModel);
@@ -58,14 +58,14 @@ namespace Fjordens_Service_ver2.Controllers
                 using (CustomerRepository _customerRepository = new CustomerRepository(ApplicationDbContext.Create()))
                 using (EmployeeRepository _employeeRepository = new EmployeeRepository(ApplicationDbContext.Create()))
                 {
-                    var customerId = _customerRepository.FindByName(postItHelpModel.customer).CustomerId;
-                    var employeeId = _employeeRepository.FindByName(postItHelpModel.employee).EmployeeId;
+                    
+
                     PostIt postIt = _postItRepo.Find(postItHelpModel.id);
                     postIt.Title = postItHelpModel.title;
                     postIt.From = postItHelpModel.start;
                     postIt.To = postItHelpModel.end;
-                    postIt.CustomerId = customerId;
-                    postIt.EmployeeId = employeeId;
+                    postIt.CustomerId = postItHelpModel.customerId;
+                    postIt.EmployeeId = postItHelpModel.employeeId;
                     postIt.Note = postItHelpModel.note;
                     _postItRepo.Update(postIt);
                     _postItRepo.Save();
@@ -84,9 +84,6 @@ namespace Fjordens_Service_ver2.Controllers
                 using (CustomerRepository _customerRepository = new CustomerRepository(ApplicationDbContext.Create()))
                 using (EmployeeRepository _employeeRepository = new EmployeeRepository(ApplicationDbContext.Create()))
                 {
-                    var customerId = _customerRepository.FindByName(postItHelpModel.customer).CustomerId;
-                    var employeeId = _employeeRepository.FindByName(postItHelpModel.employee).EmployeeId;
-                    
                     PostIt postIt = new PostIt()
                     {
                         Title = postItHelpModel.title,
@@ -95,8 +92,8 @@ namespace Fjordens_Service_ver2.Controllers
                         Note = postItHelpModel.note,
                         TemplateNo = 0,
                         CreatedDate = DateTime.Now,
-                        CustomerId = customerId,
-                        EmployeeId = employeeId,
+                        CustomerId = postItHelpModel.customerId,
+                        EmployeeId = postItHelpModel.employeeId,
 
                     };
                     _postItRepo.Insert(postIt);

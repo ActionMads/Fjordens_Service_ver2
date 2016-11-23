@@ -1,0 +1,15 @@
+﻿@model Fjordens_Service_ver2.Models.Customer
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+<h2>Opdater</h2>
+
+@using (Html.BeginForm("Edit", "Customer", FormMethod.Post))
+{
+    @Html.HiddenFor(m => m.CustomerId)
+    @Html.Partial("_CustomerPartial", Model)
+    <input type="submit" value="Gem"/>
+}
+

@@ -1,0 +1,28 @@
+﻿@model Fjordens_Service_ver2.Models.Customer
+
+<div>
+    <div>
+        @Html.Label("Virksomhed")
+        @Html.TextBoxFor(m => m.Company)
+    </div>
+    <div>
+        @Html.Label("Adresse")
+        @Html.TextBoxFor(m => m.Address)
+    </div>
+    <div>
+        @Html.Label("Email")
+        @Html.TextBoxFor(m => m.Email)
+    </div>
+    <div>
+        @Html.Label("Telefon")
+        @Html.TextBoxFor(m => m.PhoneNumber)
+    </div>
+    <div>
+        @Html.Label("Kontakt person")
+        @Html.TextBoxFor(m => m.ContactPerson)
+    </div>
+    <div>
+        @Html.Label("Opgaver")
+        @Html.TextAreaFor(m => m.Tasks)
+    </div>
+</div>
