@@ -23,6 +23,11 @@ namespace Fjordens_Service_ver2.DAL.Repositories
             return _context.PostIts;
         }
 
+        public IQueryable<PostIt> AllForTemplate(int id)
+        {
+            return _context.PostIts.Where(x => x.TemplateNo == id);
+        }
+
         public IQueryable<PostIt> AllIncluding(params Expression<Func<PostIt, object>>[] includeProperties)
         {
             return includeProperties.Aggregate<Expression<Func<PostIt, object>>,

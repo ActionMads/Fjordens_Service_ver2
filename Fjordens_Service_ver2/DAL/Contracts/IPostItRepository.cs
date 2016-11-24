@@ -11,6 +11,8 @@ namespace Fjordens_Service_ver2.DAL.Contracts
     interface IPostItRepository : IDisposable
     {
         IQueryable<PostIt> All();
+
+        IQueryable<PostIt> AllForTemplate(int id);
         IQueryable<PostIt> AllIncluding(params Expression<Func<PostIt, object>>[] includeProperties);
         PostIt Find(int id);
         void Insert(PostIt postit);

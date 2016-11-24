@@ -1,4 +1,5 @@
-﻿function saveEvent(postItHelpModel) {
+﻿
+function saveEvent(postItHelpModel) {
     $.ajax({
         type: "Post",
         url: "/PostIt/CreatePostIt",
@@ -36,7 +37,7 @@ function openEditEventPopup(id) {
     console.log($("#customersList").val());
     console.log($("#employeesList").val());
     $("#eventPopUp").dialog({
-        height: 500,
+        height: 550,
         width: 400,
         modal: true,
         title: "Opdater begivenhed",
@@ -54,7 +55,8 @@ function openEditEventPopup(id) {
                     "end": moment($("#eventDate").val() + " " + $("#eventEndTime").val(), "DD/MM/YYYY HH:mm"),
                     "customerId": $("#customersList").val(),
                     "employeeId": $("#employeesList").val(),
-                    "note": $("#eventNote").val()
+                    "note": $("#eventNote").val(),
+                    "templateNo": $("#templatesList2").val()
                 }
                 updateEvent(postItHelpModel);
                 closeForm();
@@ -69,7 +71,7 @@ function openEditEventPopup(id) {
 
 function openCreateEventPopup() {
     $("#eventPopUp").dialog({
-        height: 500,
+        height: 550,
         width: 400,
         modal: true,
         title: "Opret begivenhed",
@@ -81,7 +83,8 @@ function openCreateEventPopup() {
                     "end": moment($("#eventDate").val() +" "+ $("#eventEndTime").val(), "DD/MM/YYYY HH:mm"),
                     "customerId": $("#customersList").val(),
                     "employeeId": $("#employeesList").val(),
-                    "note": $("#eventNote").val()
+                    "note": $("#eventNote").val(),
+                    "templateNo": $("#templatesList2").val()
                 }
                 console.log(postItHelpModel)
                 saveEvent(postItHelpModel);
@@ -108,12 +111,17 @@ $(function () {
         alldaySlot: false,
         selectable: true,
         slotMinutes: 15,
-        events: "/PostIt/GetPostIts/",
+        events: {            
+            url: "/PostIt/GetPostIts",
+            data: {
+                id: $("#templatesList").val()
+            }
+
+        },
         dayClick: function (date, jsEvent, view) {
             $('#eventDate').val(moment(date).format('DD/MM/YYYY'));
             $('#eventStartTime').val(moment(date).format('HH:mm'));
-            $("#customersList select").val(0);
-            $("#employeesList select").val(0);
+            $("#templatesList2").val($("#templatesList").val());
             openCreateEventPopup();
             console.log("day clicked!");
         },
@@ -122,9 +130,12 @@ $(function () {
             $('#eventDate').val(moment(calEvent.start).format('DD/MM/YYYY'));
             $('#eventStartTime').val(moment(calEvent.start).format('HH:mm'));
             $("#eventEndTime").val(moment(calEvent.end).format("HH:mm"));
-            $("#customersList select").val(calEvent.customerId);
-            $("#employeesList select").val(calEvent.employeeId);
+            console.log(calEvent.customerName);
+            console.log(calEvent.employeeName);
+            $("#customersList").val(calEvent.customerId);
+            $("#employeesList").val(calEvent.employeeId);
             $("#eventNote").val(calEvent.note);
+            $("#templatesList2").val(calEvent.templateNo);
             openEditEventPopup(calEvent.id);
             console.log("event clicked!");
         },
@@ -133,5 +144,19 @@ $(function () {
         }
     });
     $("#eventDate").datepicker();
+
+    $("#templatesList").change(function () {
+        console.log("dropdown change");
+        var source = {
+            url: "/PostIt/GetPostIts",
+            data: {
+                id: $("#templatesList").val()
+            }
+        };
+        $("#calendar").fullCalendar("removeEventSource", source);
+        $("#calendar").fullCalendar("removeEvents");
+        $("#calendar").fullCalendar("addEventSource", source);
+        $("#calendar").fullCalendar("refetchEvents");
+    });
 });
 

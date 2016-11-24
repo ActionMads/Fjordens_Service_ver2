@@ -12,6 +12,6 @@ namespace Fjordens_Service_ver2.ViewModels
 
         public List<Employee> Employees { get; set; }
 
-
+        public List<Template> Templates { get; set; }
     }
 }

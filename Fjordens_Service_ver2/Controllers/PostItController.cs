@@ -11,17 +11,20 @@ namespace Fjordens_Service_ver2.Controllers
 {
     public class PostItController : Controller
     {
-        public JsonResult GetPostIts()
+        public JsonResult GetPostIts(int id)
         {
             List<PostItHelpModel> postItHelpModels = new List<PostItHelpModel>();
             using (IPostItRepository _postItRepository = new PostItRepository(ApplicationDbContext.Create()))
             using (ICustomerRepository _customerRepository = new CustomerRepository(ApplicationDbContext.Create()))
             using(IEmployeeRepository _employeeRepository = new EmployeeRepository(ApplicationDbContext.Create()))
             {
-                var postIts = _postItRepository.All();
+                var postIts = _postItRepository.AllForTemplate(id);
                 
                 foreach (var postIt in postIts)
                 {
+                    var customer = _customerRepository.Find(postIt.CustomerId);
+                    var employee = _employeeRepository.Find(postIt.EmployeeId);
+
                     var postItHelpModel = new PostItHelpModel()
                     {
                         id = postIt.EventId,
@@ -31,7 +34,10 @@ namespace Fjordens_Service_ver2.Controllers
                         note = postIt.Note,
                         customerId = postIt.CustomerId,
                         employeeId = postIt.EmployeeId,
-                        allDay = false
+                        customerName = customer.Company,
+                        employeeName = employee.FirstName,
+                        allDay = false,
+                        templateNo = postIt.TemplateNo
                     };
                     postItHelpModels.Add(postItHelpModel);
                 }
@@ -67,6 +73,7 @@ namespace Fjordens_Service_ver2.Controllers
                     postIt.CustomerId = postItHelpModel.customerId;
                     postIt.EmployeeId = postItHelpModel.employeeId;
                     postIt.Note = postItHelpModel.note;
+                    postIt.TemplateNo = postItHelpModel.templateNo;
                     _postItRepo.Update(postIt);
                     _postItRepo.Save();
                     return Json(true);
@@ -90,7 +97,7 @@ namespace Fjordens_Service_ver2.Controllers
                         From = postItHelpModel.start,
                         To = postItHelpModel.end,
                         Note = postItHelpModel.note,
-                        TemplateNo = 0,
+                        TemplateNo = postItHelpModel.templateNo,
                         CreatedDate = DateTime.Now,
                         CustomerId = postItHelpModel.customerId,
                         EmployeeId = postItHelpModel.employeeId,

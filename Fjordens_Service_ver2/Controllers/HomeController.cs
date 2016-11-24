@@ -18,11 +18,24 @@ namespace Fjordens_Service_ver2.Controllers
             HomeViewModel viewModel = null;
             using (ICustomerRepository _customerRepo = new CustomerRepository(ApplicationDbContext.Create()))
             using (IEmployeeRepository _employeeRepo = new EmployeeRepository(ApplicationDbContext.Create()))
+            using(IPostItRepository _postItRepo = new PostItRepository(ApplicationDbContext.Create()))
             {
+                List<Template> templates = new List<Template>();
+                for(int i = 0; i < 3; i++)
+                {
+                    Template template = new Template()
+                    {
+                        TemplateId = i,
+                        TemplateName = "Template " + i
+                    };
+                    templates.Add(template);
+                }
+
                 viewModel = new HomeViewModel()
                 {
                     Customers = _customerRepo.All().ToList(),
-                    Employees = _employeeRepo.All().ToList()
+                    Employees = _employeeRepo.All().ToList(),
+                    Templates = templates
                 };
             }
             return View(viewModel);

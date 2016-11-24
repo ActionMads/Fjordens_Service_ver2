@@ -3,6 +3,7 @@
 @{
     ViewBag.Title = "Home Page";
 }
+@Html.DropDownList("CustomersList", new SelectList(@Model.Templates, "TemplateId", "TemplateName"), new { @id = "templatesList" })<br />
 
 <div id="calendar"></div>
 
@@ -18,11 +19,13 @@
             <label>Slut tid</label><br />
             <input type="text" id="eventEndTime"/><br />
             <label>Virksomhed</label><br />
-            @Html.DropDownList("CustomersList", new SelectList(@Model.Customers, "CustomerId", "Company"), new { @id = "CustomersList"})<br />
+            @Html.DropDownList("CustomersList", new SelectList(@Model.Customers, "CustomerId", "Company"), new { @id = "customersList"})<br />
             <label>Medarbejder</label><br />
-            @Html.DropDownList("EmployeeList", new SelectList(@Model.Employees, "EmployeeId", "FirstName"), new { @id = "EmployeesList" })<br />
+            @Html.DropDownList("EmployeeList", new SelectList(@Model.Employees, "EmployeeId", "FirstName"), new { @id = "employeesList" })<br />
             <label>Note</label><br />
-            <textarea id="eventNote"></textarea>
+            <textarea id="eventNote"></textarea><br />
+            <label>Template</label><br />
+            @Html.DropDownList("CustomersList", new SelectList(@Model.Templates, "TemplateId", "TemplateName"), new { @id = "templatesList2" })
         </fieldset>
     </form>
 </div>
