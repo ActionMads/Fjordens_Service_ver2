@@ -13,34 +13,42 @@ namespace Fjordens_Service_ver2.Controllers
     {
         public JsonResult GetPostIts(int id)
         {
+            IQueryable<PostIt> postIts = null;
             List<PostItHelpModel> postItHelpModels = new List<PostItHelpModel>();
             using (IPostItRepository _postItRepository = new PostItRepository(ApplicationDbContext.Create()))
             using (ICustomerRepository _customerRepository = new CustomerRepository(ApplicationDbContext.Create()))
-            using(IEmployeeRepository _employeeRepository = new EmployeeRepository(ApplicationDbContext.Create()))
+            using (IEmployeeRepository _employeeRepository = new EmployeeRepository(ApplicationDbContext.Create()))
             {
-                var postIts = _postItRepository.AllForTemplate(id);
+                if (id == 0)
+                {
+                    postIts = _postItRepository.All();
+                }
+                else
+                {
+                    postIts = _postItRepository.AllForTemplate(id);
+                }
                 
                 foreach (var postIt in postIts)
-                {
+                    {
                     var customer = _customerRepository.Find(postIt.CustomerId);
                     var employee = _employeeRepository.Find(postIt.EmployeeId);
 
-                    var postItHelpModel = new PostItHelpModel()
+                var postItHelpModel = new PostItHelpModel()
                     {
-                        id = postIt.EventId,
-                        title = postIt.Title,
-                        start = string.Format(postIt.From, "s"),
-                        end = string.Format(postIt.To, "s"),
-                        note = postIt.Note,
-                        customerId = postIt.CustomerId,
-                        employeeId = postIt.EmployeeId,
-                        customerName = customer.Company,
-                        employeeName = employee.FirstName,
-                        allDay = false,
-                        templateNo = postIt.TemplateNo
-                    };
-                    postItHelpModels.Add(postItHelpModel);
-                }
+                    id = postIt.EventId,
+                    title = postIt.Title,
+                    start = string.Format(postIt.From, "s"),
+                    end = string.Format(postIt.To, "s"),
+                    note = postIt.Note,
+                    customerId = postIt.CustomerId,
+                    employeeId = postIt.EmployeeId,
+                    customerName = customer.Company,
+                    employeeName = employee.Name,
+                    allDay = false,
+                    templateNo = postIt.TemplateNo
+               };
+               postItHelpModels.Add(postItHelpModel);
+               }
             }
             var rows = postItHelpModels.ToArray();
             return Json(rows, JsonRequestBehavior.AllowGet);

@@ -43,7 +43,7 @@ namespace Fjordens_Service_ver2.DAL.Repositories
 
         public Employee FindByName(string name)
         {
-            return _context.Employees.FirstOrDefault(x => x.FirstName == name);
+            return _context.Employees.FirstOrDefault(x => x.Name == name);
         }
 
         public void Insert(Employee employee)

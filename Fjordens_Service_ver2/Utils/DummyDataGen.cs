@@ -30,8 +30,7 @@ namespace Fjordens_Service_ver2.Utils
             {
                 _empolyeeRepo.Insert(new Employee()
                 {
-                    FirstName = "Mads",
-                    LastName = "Munk",
+                    Name = "Mads",
                     Address = "Mågevej 46",
                     Email = "mads@madsen.dk",
                     PhoneNumber = "22222222"

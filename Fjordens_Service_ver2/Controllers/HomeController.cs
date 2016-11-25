@@ -21,7 +21,7 @@ namespace Fjordens_Service_ver2.Controllers
             using(IPostItRepository _postItRepo = new PostItRepository(ApplicationDbContext.Create()))
             {
                 List<Template> templates = new List<Template>();
-                for(int i = 0; i < 3; i++)
+                for(int i = 1; i < 3; i++)
                 {
                     Template template = new Template()
                     {
@@ -30,6 +30,13 @@ namespace Fjordens_Service_ver2.Controllers
                     };
                     templates.Add(template);
                 }
+                Template all = new Template()
+                {
+                    TemplateId = 0,
+                    TemplateName = "Alle"
+                };
+
+                templates.Add(all);
 
                 viewModel = new HomeViewModel()
                 {
@@ -52,8 +59,6 @@ namespace Fjordens_Service_ver2.Controllers
         public ActionResult About()
         {
             ViewBag.Message = "Your application description page.";
-            //var _dummyGen = new DummyDataGen();
-            //_dummyGen.generateData();
             return View();
         }
 

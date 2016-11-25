@@ -21,7 +21,7 @@
             <label>Virksomhed</label><br />
             @Html.DropDownList("CustomersList", new SelectList(@Model.Customers, "CustomerId", "Company"), new { @id = "customersList"})<br />
             <label>Medarbejder</label><br />
-            @Html.DropDownList("EmployeeList", new SelectList(@Model.Employees, "EmployeeId", "FirstName"), new { @id = "employeesList" })<br />
+            @Html.DropDownList("EmployeeList", new SelectList(@Model.Employees, "EmployeeId", "Name"), new { @id = "employeesList" })<br />
             <label>Note</label><br />
             <textarea id="eventNote"></textarea><br />
             <label>Template</label><br />

@@ -2,12 +2,8 @@
 
 <div>
     <div>
-        @Html.Label("Fornavn")
-        @Html.TextBoxFor(m => m.FirstName)
-    </div>
-    <div>
-        @Html.Label("Efternavn")
-        @Html.TextBoxFor(m => m.LastName)
+        @Html.Label("Navn")
+        @Html.TextBoxFor(m => m.Name)
     </div>
     <div>
         @Html.Label("Addresse")
@@ -20,5 +16,9 @@
     <div>
         @Html.Label("Telefon")
         @Html.TextBoxFor(m => m.PhoneNumber)
+    </div>
+    <div>
+        @Html.Label("Beskrivelse")
+        @Html.TextBoxFor(m => m.Description)
     </div>
 </div>
