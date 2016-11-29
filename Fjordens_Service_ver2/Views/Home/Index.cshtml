@@ -3,7 +3,11 @@
 @{
     ViewBag.Title = "Home Page";
 }
-@Html.DropDownList("CustomersList", new SelectList(@Model.Templates, "TemplateId", "TemplateName"), new { @id = "templatesList" })<br />
+@Html.DropDownList("TemplatesList", new SelectList(@Model.Templates, "TemplateId", "TemplateName"), new { @id = "templatesList" })
+
+<button id="addTemp">Opret template</button>
+
+@Html.DropDownList("employeeList2", new SelectList(@Model.EmployeesList2, "Id", "Name"), new { @id = "employeesList2"})
 
 <div id="calendar"></div>
 
@@ -24,8 +28,9 @@
             @Html.DropDownList("EmployeeList", new SelectList(@Model.Employees, "EmployeeId", "Name"), new { @id = "employeesList" })<br />
             <label>Note</label><br />
             <textarea id="eventNote"></textarea><br />
-            <label>Template</label><br />
-            @Html.DropDownList("CustomersList", new SelectList(@Model.Templates, "TemplateId", "TemplateName"), new { @id = "templatesList2" })
+            <label id="checkbox1"><input type="checkbox" id="saveToTemp">Gem til template: </label>
+            <label id="checkbox2"><input type="checkbox" id="delFromTemp" />Slet fra template: </label>
+            @Html.DropDownList("TemplatesList2", new SelectList(@Model.Templates, "TemplateId", "TemplateName"), new { @id = "templatesList2" })
         </fieldset>
     </form>
 </div>

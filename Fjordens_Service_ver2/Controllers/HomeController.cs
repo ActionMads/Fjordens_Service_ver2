@@ -26,34 +26,39 @@ namespace Fjordens_Service_ver2.Controllers
                     Template template = new Template()
                     {
                         TemplateId = i,
-                        TemplateName = "Template " + i
+                        TemplateName = "Template - Uge " + i
                     };
                     templates.Add(template);
                 }
-                Template all = new Template()
-                {
-                    TemplateId = 0,
-                    TemplateName = "Alle"
-                };
 
-                templates.Add(all);
+                var employees = _employeeRepo.All();
+                List<EmployeeHelpModel> employeeHelpModels = new List<EmployeeHelpModel>();
+                EmployeeHelpModel all = new EmployeeHelpModel()
+                {
+                    Id = -1,
+                    Name = "Alle"
+                };
+                employeeHelpModels.Add(all);
+                foreach (var employee in employees)
+                {
+                    EmployeeHelpModel helpModel = new EmployeeHelpModel()
+                    {
+                        Id = employee.EmployeeId,
+                        Name = employee.Name
+                    };
+                    employeeHelpModels.Add(helpModel);
+                }
+
 
                 viewModel = new HomeViewModel()
                 {
                     Customers = _customerRepo.All().ToList(),
-                    Employees = _employeeRepo.All().ToList(),
+                    Employees = employees.ToList(),
+                    EmployeesList2 = employeeHelpModels,
                     Templates = templates
                 };
             }
             return View(viewModel);
-        }
-
-        public JsonResult LoadEvents(string start, string end)
-        {
-            var list = GetEvents();
-
-            var rows = list.ToArray();
-            return Json(rows, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult About()
@@ -67,27 +72,6 @@ namespace Fjordens_Service_ver2.Controllers
             ViewBag.Message = "Your contact page.";
 
             return View();
-        }
-
-        private List<PostItHelpModel> GetEvents()
-        {
-            List<PostItHelpModel> eventList = new List<PostItHelpModel>();
-
-            PostItHelpModel postIt = new PostItHelpModel
-            {
-                id = 1,
-                title = "First Event",
-                start = DateTime.Now.AddDays(1).ToString("s"),
-                end = DateTime.Now.AddDays(1).AddMinutes(55).ToString("s"),
-                allDay = false,
-                employeeId = 1,
-                customerId = 1,
-                note = "This is just a test"
-            };
-
-            eventList.Add(postIt);
-
-            return eventList;
         }
     }
 }

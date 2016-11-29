@@ -15,6 +15,8 @@ namespace Fjordens_Service_ver2.Models
 
         public string end { get; set; }
 
+        public int dayOfWeek { get; set; }
+
         public bool allDay { get; set; }
 
         public string employeeName { get; set; }

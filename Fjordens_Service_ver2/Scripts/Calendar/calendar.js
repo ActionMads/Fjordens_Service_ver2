@@ -1,11 +1,12 @@
 ﻿
 $(function () {
-
+    var currentEmployee = -1;
     var calLoading = true;
     var source = {
         url: "/PostIt/GetPostIts",
         data: {
-            id: $("#templatesList").val()
+            id: 0,
+            employeeId: currentEmployee
         }
     };
 
@@ -16,7 +17,10 @@ $(function () {
             url: "/PostIt/CreatePostIt",
             dataType: "json",
             contentType: "application/json",
-            data: JSON.stringify(postItHelpModel)
+            data: JSON.stringify(postItHelpModel),
+            success: function (data) {
+                loadEvents();
+            }
         });
     }
 
@@ -26,7 +30,10 @@ $(function () {
             url: "/PostIt/UpdatePostIt",
             dataType: "json",
             contentType: "application/json",
-            data: JSON.stringify(postItHelpModel)
+            data: JSON.stringify(postItHelpModel),
+            success: function (data) {
+                loadEvents();
+            }
         });
     }
 
@@ -35,14 +42,25 @@ $(function () {
             url: "/PostIt/DelPostIt",
             dataType: "json",
             contentType: "application/json",
-            data: { id: id }
+            data: { id: id },
+            success: function (data) {
+                loadEvents();
+            }
         });
     }
 
     function closeForm() {
         $("#eventPopUp").dialog("close");
         $("#eventForm")[0].reset();
-        $("#calendar").fullCalendar("refetchEvents");
+    }
+
+    function getTemplateNo() {
+        if ($("#saveToTemp").prop("checked")) {
+            console.log($("#templatesList2").val());
+            return $("#templatesList2").val();
+        } else {
+            return 0;
+        }
     }
 
     function openEditEventPopup(id) {
@@ -58,15 +76,18 @@ $(function () {
                     closeForm();
                 },
                 "Gem": function () {
+                    var start = moment($("#eventDate").val() + " " + $("#eventStartTime").val(), "DD/MM/YYYY HH:mm")
                     var postItHelpModel = {
                         "id": id,
                         "title": $("#eventTitle").val(),
-                        "start": moment($("#eventDate").val() + " " + $("#eventStartTime").val(), "DD/MM/YYYY HH:mm"),
+                        "start": start,
                         "end": moment($("#eventDate").val() + " " + $("#eventEndTime").val(), "DD/MM/YYYY HH:mm"),
                         "customerId": $("#customersList").val(),
                         "employeeId": $("#employeesList").val(),
                         "note": $("#eventNote").val(),
-                        "templateNo": $("#templatesList2").val()
+                        "templateNo": 0,
+                        "dayOfWeek": getDayOfWeek(start)
+                        
                     }
                     updateEvent(postItHelpModel);
                     closeForm();
@@ -79,7 +100,7 @@ $(function () {
         });
     }
 
-    function openCreateEventPopup() {
+    function openCreateEventPopup(dayOfWeek) {
         $("#eventPopUp").dialog({
             height: 550,
             width: 400,
@@ -87,16 +108,19 @@ $(function () {
             title: "Opret begivenhed",
             buttons: {
                 "Gem": function () {
+                    var templateNo = getTemplateNo();
                     var postItHelpModel = {
                         "title": $("#eventTitle").val(),
                         "start": moment($("#eventDate").val() + " " + $("#eventStartTime").val(), "DD/MM/YYYY HH:mm"),
                         "end": moment($("#eventDate").val() + " " + $("#eventEndTime").val(), "DD/MM/YYYY HH:mm"),
+                        "dayOfWeek": dayOfWeek,
                         "customerId": $("#customersList").val(),
                         "employeeId": $("#employeesList").val(),
                         "note": $("#eventNote").val(),
-                        "templateNo": $("#templatesList2").val()
+                        "templateNo": templateNo
                     }
-                    console.log(postItHelpModel)
+                
+                    console.log(postItHelpModel);
                     saveEvent(postItHelpModel);
                     closeForm();
                 },
@@ -111,7 +135,8 @@ $(function () {
         source = {
             url: "/PostIt/GetPostIts",
             data: {
-                id: $("#templatesList").val()
+                id: 0,
+                employeeId: currentEmployee
             }
         }
         $("#calendar").fullCalendar("removeEventSource", source);
@@ -120,13 +145,64 @@ $(function () {
         $("#calendar").fullCalendar("refetchEvents");
     }
 
+    function getDayOfWeek(date) {
+        console.log(moment(date).format("ddd"));
+        if (moment(date).format("ddd") === "man") {
+            return 0;
+        } else if (moment(date).format("ddd") === "tir") {
+            return 1;
+        } else if (moment(date).format("ddd") === "ons") {
+            return 2;
+        } else if (moment(date).format("ddd") === "tor") {
+            return 3;
+        } else if (moment(date).format("ddd") === "fre") {
+            return 4;
+        } else if (moment(date).format("ddd") === "lør") {
+            return 5;
+        } else if (moment(date).format("ddd") === "søn") {
+            return 6;
+        } else {
+            console.log("error");
+        }
+    }
+
+    $("#addTemp").click(function () {
+        var templateData = {
+            "templateId": $("#templatesList").val(),
+            "start": $("#calendar").fullCalendar("getView").start._d,
+            "end": $("#calendar").fullCalendar("getView").end._d
+        };
+
+        $.ajax({
+            type: "Post",
+            url: "/PostIt/CreateTemplate",
+            dataType: "json",
+            contentType: "application/json",
+            data: JSON.stringify(templateData),
+            success: function(data){
+                loadEvents();
+            } 
+        });
+        
+    });
+
+    function changeCheckBox(kindOfClick) {
+        if (kindOfClick === "day") {
+            $("#checkbox1").show();
+            $("#checkbox2").hide();
+        } else {
+            $("#checkbox1").hide();
+            $("#checkbox2").show();
+        }
+    }
+
     $("#calendar").fullCalendar({
         header: {
             left: "prev,next, today",
             center: "title",
             right: "month,agendaWeek,agendaDay"
         },
-        defaultView: "agendaDay",
+        defaultView: "agendaWeek",
         editable: true,
         alldaySlot: false,
         selectable: true,
@@ -135,8 +211,9 @@ $(function () {
         dayClick: function (date, jsEvent, view) {
             $('#eventDate').val(moment(date).format('DD/MM/YYYY'));
             $('#eventStartTime').val(moment(date).format('HH:mm'));
-            $("#templatesList2").val($("#templatesList").val());
-            openCreateEventPopup();
+            var dayOfWeek = getDayOfWeek(date);
+            changeCheckBox("day");
+            openCreateEventPopup(dayOfWeek);
             console.log("day clicked!");
         },
         eventClick: function (calEvent, jsEvent, view) {
@@ -149,7 +226,7 @@ $(function () {
             $("#customersList").val(calEvent.customerId);
             $("#employeesList").val(calEvent.employeeId);
             $("#eventNote").val(calEvent.note);
-            $("#templatesList2").val(calEvent.templateNo);
+            changeCheckBox("event");
             openEditEventPopup(calEvent.id);
             console.log("event clicked!");
         },
@@ -165,9 +242,11 @@ $(function () {
     });
     $("#eventDate").datepicker();
 
-    $("#templatesList").change(function () {
-        console.log("dropdown change");
+    $("#employeesList2").change(function () {
+        currentEmployee = $(this).val();
+        console.log($(this).val());
         loadEvents();
+        
     });
 });
 

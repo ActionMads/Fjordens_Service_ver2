@@ -17,6 +17,8 @@ namespace Fjordens_Service_ver2.Models
 
         public string To { get; set; }
 
+        public int DayOfWeek { get; set; }
+
         public string Note { get; set; }
 
         public int TemplateNo { get; set; }
