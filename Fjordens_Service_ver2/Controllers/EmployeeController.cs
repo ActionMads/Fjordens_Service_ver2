@@ -25,6 +25,35 @@ namespace Fjordens_Service_ver2.Controllers
             }
             
         }
+
+        public ActionResult FileUpload(HttpPostedFileBase file, int employeeId)
+        {
+            if(file != null)
+            {
+                try
+                {
+                    string targetFolder = Server.MapPath("~/Content/images/employees");
+                    string pic = System.IO.Path.GetFileName(file.FileName);
+                    string path = System.IO.Path.Combine(targetFolder, pic);
+                    string dbPath = "/Content/images/employees/" + pic;
+
+                    file.SaveAs(path);
+                    using(IEmployeeRepository _employeeRepo = new EmployeeRepository(ApplicationDbContext.Create()))
+                    {
+                        var employee = _employeeRepo.Find(employeeId);
+                        employee.ImgPath = dbPath;
+                        _employeeRepo.Update(employee);
+                        _employeeRepo.Save();
+                    }
+                }
+                catch (Exception)
+                {
+
+                }
+            }
+            return RedirectToAction("Index");
+        }
+
         [HttpGet]
         public ActionResult Create()
         {

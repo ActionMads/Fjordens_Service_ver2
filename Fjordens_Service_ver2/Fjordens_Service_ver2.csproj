@@ -254,6 +254,7 @@
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\Calendar\calendar.js" />
+    <Content Include="Scripts\Calendar\ImageUpload.js" />
     <Content Include="Scripts\fullcalendar.js" />
     <Content Include="Scripts\fullcalendar.min.js" />
     <Content Include="Scripts\gcal.js" />
@@ -394,6 +395,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Content\images\employees\" />
     <Folder Include="Views\PostIt\" />
   </ItemGroup>
   <ItemGroup>
