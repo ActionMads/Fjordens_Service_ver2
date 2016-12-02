@@ -35,7 +35,7 @@ namespace Fjordens_Service_ver2
                       "~/Content/themes/base/all.css",
                       "~/Content/fullcalendar.css",
                       "~/Content/bootstrap.css",
-                      "~/Content/site.css"
+                      "~/Content/Site.css"
                       ));
         }
     }

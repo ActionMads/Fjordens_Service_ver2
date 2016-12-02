@@ -22,3 +22,9 @@ select,
 textarea {
     max-width: 280px;
 }
+
+.employeeImg{
+    width: 150px;
+    height: 150px;
+    cursor: pointer;
+}

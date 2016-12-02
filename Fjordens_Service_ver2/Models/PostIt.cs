@@ -21,6 +21,8 @@ namespace Fjordens_Service_ver2.Models
 
         public string Note { get; set; }
 
+        public int? TemplateId { get; set; }
+
         public int TemplateNo { get; set; }
 
         public DateTime CreatedDate { get; set; }

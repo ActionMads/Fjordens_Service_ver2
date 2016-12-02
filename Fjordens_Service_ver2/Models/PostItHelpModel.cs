@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
-namespace Fjordens_Service_ver2.Models
+﻿namespace Fjordens_Service_ver2.Models
 {
     public class PostItHelpModel
     {
@@ -30,5 +25,7 @@ namespace Fjordens_Service_ver2.Models
         public string note { get; set; }
 
         public int templateNo { get; set; }
+
+        public int? templateId { get; set; }
     }
 }

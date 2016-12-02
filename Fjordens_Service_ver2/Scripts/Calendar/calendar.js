@@ -37,12 +37,15 @@ $(function () {
         });
     }
 
-    function deleteEvent(id) {
+    function deleteEvent(id, templateId) {
         $.ajax({
             url: "/PostIt/DelPostIt",
             dataType: "json",
             contentType: "application/json",
-            data: { id: id },
+            data: {
+                id: id,
+                templateId: templateId
+            },
             success: function (data) {
                 loadEvents();
             }
@@ -63,7 +66,7 @@ $(function () {
         }
     }
 
-    function openEditEventPopup(id) {
+    function openEditEventPopup(id, templateId) {
         $("#eventPopUp").dialog({
             height: 550,
             width: 400,
@@ -72,11 +75,14 @@ $(function () {
             buttons: {
                 "Delete": function () {
                     console.log(id);
-                    deleteEvent(id);
+                    console.log(templateId)
+                    deleteEvent(id, templateId);
                     closeForm();
                 },
                 "Gem": function () {
                     var start = moment($("#eventDate").val() + " " + $("#eventStartTime").val(), "DD/MM/YYYY HH:mm")
+                    console.log(start);
+                    console.log(moment($("#eventDate").val() + " " + $("#eventEndTime").val(), "DD/MM/YYYY HH:mm"))
                     var postItHelpModel = {
                         "id": id,
                         "title": $("#eventTitle").val(),
@@ -109,15 +115,17 @@ $(function () {
             buttons: {
                 "Gem": function () {
                     var templateNo = getTemplateNo();
+                    var start = moment($("#eventDate").val() + " " + $("#eventStartTime").val(), "DD/MM/YYYY HH:mm Z");
+                    var end = moment($("#eventDate").val() + " " + $("#eventEndTime").val(), "DD/MM/YYYY HH:mm Z");
                     var postItHelpModel = {
                         "title": $("#eventTitle").val(),
-                        "start": moment($("#eventDate").val() + " " + $("#eventStartTime").val(), "DD/MM/YYYY HH:mm"),
-                        "end": moment($("#eventDate").val() + " " + $("#eventEndTime").val(), "DD/MM/YYYY HH:mm"),
+                        "start": start,
+                        "end": end,
                         "dayOfWeek": dayOfWeek,
                         "customerId": $("#customersList").val(),
                         "employeeId": $("#employeesList").val(),
                         "note": $("#eventNote").val(),
-                        "templateNo": templateNo
+                        "templateNo": templateNo,
                     }
                 
                     console.log(postItHelpModel);
@@ -200,7 +208,14 @@ $(function () {
         header: {
             left: "prev,next, today",
             center: "title",
-            right: "month,agendaWeek,agendaDay"
+            right: "month,agendaWeek,agendaTwoWeeks,agendaDay"
+        },
+        views: {
+            agendaTwoWeeks: {
+                type: "agenda",
+                duration: { weeks: 2 },
+                buttonText: "2 Uger"
+            }
         },
         defaultView: "agendaWeek",
         editable: true,
@@ -227,7 +242,7 @@ $(function () {
             $("#employeesList").val(calEvent.employeeId);
             $("#eventNote").val(calEvent.note);
             changeCheckBox("event");
-            openEditEventPopup(calEvent.id);
+            openEditEventPopup(calEvent.id, calEvent.templateId);
             console.log("event clicked!");
         },
         eventRender: function (event, element) {

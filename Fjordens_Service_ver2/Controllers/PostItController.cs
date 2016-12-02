@@ -46,7 +46,8 @@ namespace Fjordens_Service_ver2.Controllers
                         customerName = customer.Company,
                         employeeName = employee.Name,
                         allDay = false,
-                        templateNo = postIt.TemplateNo
+                        templateNo = postIt.TemplateNo,
+                        templateId = postIt.TemplateId
                     };
                     postItHelpModels.Add(postItHelpModel);
                 }
@@ -68,13 +69,13 @@ namespace Fjordens_Service_ver2.Controllers
                 foreach (var postIt in postIts)
                 {
                     var from = Convert.ToDateTime(templateData.start);
-                    from.AddDays(postIt.DayOfWeek);
+                    var fromAddDays = from.AddDays(postIt.DayOfWeek);
                     var to = Convert.ToDateTime(templateData.start);
-                    to.AddDays(postIt.DayOfWeek);
+                    var toAddDays = to.AddDays(postIt.DayOfWeek);
                     var fromToDate = DateTime.Parse(postIt.From);
                     var toToDate = DateTime.Parse(postIt.To);
-                    var finalStart = from.Add(TimeSpan.Parse(fromToDate.ToString("HH:mm")));
-                    var finalEnd = to.Add(TimeSpan.Parse(toToDate.ToString("HH:mm")));
+                    var finalStart = fromAddDays.Add(TimeSpan.Parse(fromToDate.ToString("HH:mm")));
+                    var finalEnd = toAddDays.Add(TimeSpan.Parse(toToDate.ToString("HH:mm")));
 
                     PostIt newPostIt = new PostIt()
                     {
@@ -85,6 +86,7 @@ namespace Fjordens_Service_ver2.Controllers
                         CustomerId = postIt.CustomerId,
                         EmployeeId = postIt.EmployeeId,
                         TemplateNo = 0,
+                        TemplateId = postIt.EventId,
                         CreatedDate = DateTime.Now,
                         DayOfWeek = postIt.DayOfWeek
                     };
@@ -99,12 +101,18 @@ namespace Fjordens_Service_ver2.Controllers
             return Json(true);
         }
 
-        public JsonResult DelPostIt(int id)
+        public JsonResult DelPostIt(DelPostItData delTempData)
         {
             using (IPostItRepository _postItRepo = new PostItRepository(ApplicationDbContext.Create()))
             {
-                _postItRepo.Delete(id);
+                _postItRepo.Delete(delTempData.Id);
                 _postItRepo.Save();
+                if(delTempData.TemplateId.HasValue)
+                {
+                    int templateId = delTempData.TemplateId.Value;
+                    _postItRepo.Delete(templateId);
+                    _postItRepo.Save();
+                }
                 return Json(true);
             }
         }
@@ -117,8 +125,6 @@ namespace Fjordens_Service_ver2.Controllers
                 using (CustomerRepository _customerRepository = new CustomerRepository(ApplicationDbContext.Create()))
                 using (EmployeeRepository _employeeRepository = new EmployeeRepository(ApplicationDbContext.Create()))
                 {
-                    
-
                     PostIt postIt = _postItRepo.Find(postItHelpModel.id);
                     postIt.Title = postItHelpModel.title;
                     postIt.From = postItHelpModel.start;

@@ -26,7 +26,7 @@ namespace Fjordens_Service_ver2.Controllers
             
         }
 
-        public ActionResult FileUpload(HttpPostedFileBase file, int employeeId)
+        public ActionResult FileUpload(HttpPostedFileBase file, int id)
         {
             if(file != null)
             {
@@ -40,7 +40,7 @@ namespace Fjordens_Service_ver2.Controllers
                     file.SaveAs(path);
                     using(IEmployeeRepository _employeeRepo = new EmployeeRepository(ApplicationDbContext.Create()))
                     {
-                        var employee = _employeeRepo.Find(employeeId);
+                        var employee = _employeeRepo.Find(id);
                         employee.ImgPath = dbPath;
                         _employeeRepo.Update(employee);
                         _employeeRepo.Save();
