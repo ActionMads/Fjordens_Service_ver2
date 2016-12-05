@@ -147,6 +147,8 @@ namespace Fjordens_Service_ver2.Controllers
         {
             if (ModelState.IsValid)
             {
+                TimeZone localTime = TimeZone.CurrentTimeZone;
+                Console.WriteLine(localTime.StandardName);
                 using (PostItRepository _postItRepo = new PostItRepository(ApplicationDbContext.Create()))
                 using (CustomerRepository _customerRepository = new CustomerRepository(ApplicationDbContext.Create()))
                 using (EmployeeRepository _employeeRepository = new EmployeeRepository(ApplicationDbContext.Create()))

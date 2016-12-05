@@ -106,7 +106,7 @@ $(function () {
         });
     }
 
-    function openCreateEventPopup(dayOfWeek) {
+    function openCreateEventPopup() {
         $("#eventPopUp").dialog({
             height: 550,
             width: 400,
@@ -115,13 +115,13 @@ $(function () {
             buttons: {
                 "Gem": function () {
                     var templateNo = getTemplateNo();
-                    var start = moment($("#eventDate").val() + " " + $("#eventStartTime").val(), "DD/MM/YYYY HH:mm Z");
-                    var end = moment($("#eventDate").val() + " " + $("#eventEndTime").val(), "DD/MM/YYYY HH:mm Z");
+                    var start = moment($("#eventDate").val() + " " + $("#eventStartTime").val(), "DD/MM/YYYY HH:mm");
+                    var end = moment($("#eventDate").val() + " " + $("#eventEndTime").val(), "DD/MM/YYYY HH:mm");
                     var postItHelpModel = {
                         "title": $("#eventTitle").val(),
-                        "start": start,
-                        "end": end,
-                        "dayOfWeek": dayOfWeek,
+                        "start": start.format("YYYY-MM-DD HH:mm"),
+                        "end": end.format("YYYY-MM-DD HH:mm"),
+                        "dayOfWeek": getDayOfWeek(start),
                         "customerId": $("#customersList").val(),
                         "employeeId": $("#employeesList").val(),
                         "note": $("#eventNote").val(),
@@ -139,6 +139,11 @@ $(function () {
         });
     }
 
+    function getColor(i) {
+        var colors = ["Blue", "Brown", "BlueViolet", "BurlyWood", "CadetBlue", "Chartreuse"];
+        return colors[i];
+    }
+
     function loadEvents() {
         source = {
             url: "/PostIt/GetPostIts",
@@ -154,24 +159,38 @@ $(function () {
     }
 
     function getDayOfWeek(date) {
-        console.log(moment(date).format("ddd"));
-        if (moment(date).format("ddd") === "man") {
-            return 0;
-        } else if (moment(date).format("ddd") === "tir") {
-            return 1;
-        } else if (moment(date).format("ddd") === "ons") {
-            return 2;
-        } else if (moment(date).format("ddd") === "tor") {
-            return 3;
-        } else if (moment(date).format("ddd") === "fre") {
-            return 4;
-        } else if (moment(date).format("ddd") === "lør") {
-            return 5;
-        } else if (moment(date).format("ddd") === "søn") {
-            return 6;
+        console.log((moment(date).format("ddd")));
+        var formatDate = moment(date).format("ddd");
+        var startDate = $("#calendar").fullCalendar("getView").start;
+        var dayOfWeek = 0
+        console.log(startDate.isoWeek())
+        if (formatDate === "man") {
+            dayOfWeek = 0;
+        } else if (formatDate === "tir") {
+            dayOfWeek = 1;
+        } else if (formatDate === "ons") {
+            dayOfWeek = 2;
+        } else if (formatDate === "tor") {
+            dayOfWeek = 3;
+        } else if (formatDate === "fre") {
+            dayOfWeek = 4;
+        } else if (formatDate === "lør") {
+            dayOfWeek = 5;
+        } else if (formatDate === "søn") {
+            dayOfWeek = 6;
         } else {
-            console.log("error");
+            console.log("dayOfWeek error");
+            dayOfWeek = 0;
         }
+        if (moment(date).isoWeek() > startDate.isoWeek()) {
+            dayOfWeek += 8;
+            console.log(dayOfWeek);
+        }
+        if (moment(date).isoWeek() == 1 && startDate.isoWeek() > 1) {
+            dayOfWeek += 8;
+            console.log(dayOfWeek);
+        }
+        return dayOfWeek;
     }
 
     $("#addTemp").click(function () {
@@ -222,13 +241,13 @@ $(function () {
         alldaySlot: false,
         selectable: true,
         slotMinutes: 15,
+        timezone: "UTC",
         events: source,
         dayClick: function (date, jsEvent, view) {
             $('#eventDate').val(moment(date).format('DD/MM/YYYY'));
             $('#eventStartTime').val(moment(date).format('HH:mm'));
-            var dayOfWeek = getDayOfWeek(date);
             changeCheckBox("day");
-            openCreateEventPopup(dayOfWeek);
+            openCreateEventPopup();
             console.log("day clicked!");
         },
         eventClick: function (calEvent, jsEvent, view) {
@@ -247,6 +266,8 @@ $(function () {
         },
         eventRender: function (event, element) {
             element.attr("title", event.note);
+            var color = getColor(event.employeeId)
+            element.css("background-color", color);
         },
         viewRender: function (view, element) {
             if (!calLoading) {
