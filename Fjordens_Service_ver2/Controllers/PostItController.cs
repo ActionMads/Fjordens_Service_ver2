@@ -56,6 +56,60 @@ namespace Fjordens_Service_ver2.Controllers
             return Json(rows, JsonRequestBehavior.AllowGet);
         }
 
+        public JsonResult GetTemplate(string start, string end, int id, int employeeId)
+        {
+            IQueryable<PostIt> postIts = null;
+            List<PostItHelpModel> postItsList = new List<PostItHelpModel>();
+            using (IPostItRepository _postItRepository = new PostItRepository(ApplicationDbContext.Create()))
+            using (ICustomerRepository _customerRepository = new CustomerRepository(ApplicationDbContext.Create()))
+            using (IEmployeeRepository _employeeRepository = new EmployeeRepository(ApplicationDbContext.Create()))
+            {
+                if (employeeId > -1)
+                {
+                    postIts = _postItRepository.AllForEmployee(employeeId, id);
+                }
+                else
+                {
+                    postIts = _postItRepository.AllForTemplate(id);
+                }
+
+                foreach (var postIt in postIts)
+                {
+                    var customer = _customerRepository.Find(postIt.CustomerId);
+                    var employee = _employeeRepository.Find(postIt.EmployeeId);
+
+                    var from = Convert.ToDateTime(start);
+                    var fromAddDays = from.AddDays(postIt.DayOfWeek);
+                    var to = Convert.ToDateTime(start);
+                    var toAddDays = to.AddDays(postIt.DayOfWeek);
+                    var fromToDate = DateTime.Parse(postIt.From);
+                    var toToDate = DateTime.Parse(postIt.To);
+                    var finalStart = fromAddDays.Add(TimeSpan.Parse(fromToDate.ToString("HH:mm")));
+                    var finalEnd = toAddDays.Add(TimeSpan.Parse(toToDate.ToString("HH:mm")));
+
+                    PostItHelpModel newPostIt = new PostItHelpModel()
+                    {
+                        id = postIt.EventId,
+                        title = postIt.Title,
+                        start = finalStart.ToString("s"),
+                        end = finalEnd.ToString("s"),
+                        note = postIt.Note,
+                        customerId = postIt.CustomerId,
+                        employeeId = postIt.EmployeeId,
+                        customerName = customer.Company,
+                        employeeName = employee.Name,
+                        templateNo = id,
+                        templateId = null,
+                        allDay = false,
+                        dayOfWeek = postIt.DayOfWeek
+                    };
+                    postItsList.Add(newPostIt);
+                }
+            }
+            var rows = postItsList.ToArray();
+            return Json(rows, JsonRequestBehavior.AllowGet);
+        }
+
         public JsonResult CreateTemplate(TemplateData templateData)
         {
             IQueryable<PostIt> postIts = null;
@@ -101,19 +155,13 @@ namespace Fjordens_Service_ver2.Controllers
             return Json(true);
         }
 
-        public JsonResult DelPostIt(DelPostItData delTempData)
+        public JsonResult DelPostIt(int id)
         {
             using (IPostItRepository _postItRepo = new PostItRepository(ApplicationDbContext.Create()))
             {
-                _postItRepo.Delete(delTempData.Id);
+                _postItRepo.Delete(id);
                 _postItRepo.Save();
-                if(delTempData.TemplateId.HasValue)
-                {
-                    int templateId = delTempData.TemplateId.Value;
-                    _postItRepo.Delete(templateId);
-                    _postItRepo.Save();
-                }
-                return Json(true);
+                return Json(true, JsonRequestBehavior.AllowGet);
             }
         }
 
@@ -168,12 +216,6 @@ namespace Fjordens_Service_ver2.Controllers
                     };
                     _postItRepo.Insert(postIt);
                     _postItRepo.Save();
-                    if(postItHelpModel.templateNo > 0)
-                    {
-                        postIt.TemplateNo = 0;
-                        _postItRepo.Insert(postIt);
-                        _postItRepo.Save();
-                    }
                     return Json(true);
                 }
             }

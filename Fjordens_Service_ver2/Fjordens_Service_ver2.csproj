@@ -173,6 +173,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\PostItController.cs" />
+    <Compile Include="Controllers\TemplateController.cs" />
     <Compile Include="DAL\Contracts\ICustomerRepository.cs" />
     <Compile Include="DAL\Contracts\IEmployeeRepository.cs" />
     <Compile Include="DAL\Contracts\IPostItRepository.cs" />
@@ -207,6 +208,7 @@
     <Content Include="Content\fullcalendar.css" />
     <Content Include="Content\fullcalendar.min.css" />
     <Content Include="Content\fullcalendar.print.css" />
+    <Content Include="Content\images\employees\blank-profile-md.jpg" />
     <Content Include="Content\themes\base\accordion.css" />
     <Content Include="Content\themes\base\all.css" />
     <Content Include="Content\themes\base\autocomplete.css" />
@@ -255,6 +257,7 @@
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\Calendar\calendar.js" />
+    <Content Include="Scripts\Calendar\editTemplate.js" />
     <Content Include="Scripts\Calendar\ImageUpload.js" />
     <Content Include="Scripts\fullcalendar.js" />
     <Content Include="Scripts\fullcalendar.min.js" />
@@ -393,10 +396,11 @@
     <Content Include="Views\Customer\Create.cshtml" />
     <Content Include="Views\Shared\_CustomerPartial.cshtml" />
     <Content Include="Views\Customer\Edit.cshtml" />
+    <Content Include="Views\Template\Index.cshtml" />
+    <Content Include="Views\Shared\popPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Content\images\employees\" />
     <Folder Include="Views\PostIt\" />
   </ItemGroup>
   <ItemGroup>

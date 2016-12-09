@@ -1,0 +1,22 @@
+﻿@model Fjordens_Service_ver2.ViewModels.HomeViewModel
+@{
+    ViewBag.Title = "Rediger Template";
+}
+
+@Html.DropDownList("editTemplatesList", new SelectList(@Model.Templates, "TemplateId", "TemplateName"), new { @id = "editTemplatesList" })
+
+@Html.DropDownList("editEmployeeList2", new SelectList(@Model.EmployeesList2, "Id", "Name"), new { @id = "editEmployeesList2" })
+
+<div id="editCalendar"></div>
+
+<div id="editEventPopUp" style="display: none" title="Ny begivenhed">
+    <form id="editEventForm">
+        <fieldset>
+            @Html.Partial("popPartial", Model)
+        </fieldset>
+    </form>
+</div>
+
+@section Scripts{
+    <script src="~/Scripts/Calendar/editTemplate.js"></script>
+}

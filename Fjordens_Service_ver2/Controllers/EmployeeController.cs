@@ -67,6 +67,7 @@ namespace Fjordens_Service_ver2.Controllers
             {
                 using (IEmployeeRepository _employeeRepo = new EmployeeRepository(ApplicationDbContext.Create()))
                 {
+                    employee.ImgPath = "/Content/images/employees/blank-profile-md.jpg";
                     _employeeRepo.Insert(employee);
                     _employeeRepo.Save();
                     return RedirectToAction("Index");

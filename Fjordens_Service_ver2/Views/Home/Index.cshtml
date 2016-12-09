@@ -7,6 +7,8 @@
 
 <button id="addTemp">Opret template</button>
 
+@Html.ActionLink("Rediger Templates", "Index", "Template")
+
 @Html.DropDownList("employeeList2", new SelectList(@Model.EmployeesList2, "Id", "Name"), new { @id = "employeesList2"})
 
 <div id="calendar"></div>
@@ -14,23 +16,7 @@
 <div id="eventPopUp" style="display: none" title="Ny begivenhed">
     <form id="eventForm">
         <fieldset>
-            <label>Title</label><br />
-            <input type="text" id="eventTitle"/><br />
-            <label>Dato</label><br/>
-            <input type="text" id="eventDate"/><br />
-            <label>Start tid</label><br />
-            <input type="text" id="eventStartTime"/><br />
-            <label>Slut tid</label><br />
-            <input type="text" id="eventEndTime"/><br />
-            <label>Virksomhed</label><br />
-            @Html.DropDownList("CustomersList", new SelectList(@Model.Customers, "CustomerId", "Company"), new { @id = "customersList"})<br />
-            <label>Medarbejder</label><br />
-            @Html.DropDownList("EmployeeList", new SelectList(@Model.Employees, "EmployeeId", "Name"), new { @id = "employeesList" })<br />
-            <label>Note</label><br />
-            <textarea id="eventNote"></textarea><br />
-            <label id="checkbox1"><input type="checkbox" id="saveToTemp">Gem til template: </label>
-            <label id="checkbox2"><input type="checkbox" id="delFromTemp" />Slet fra template: </label>
-            @Html.DropDownList("TemplatesList2", new SelectList(@Model.Templates, "TemplateId", "TemplateName"), new { @id = "templatesList2" })
+            @Html.Partial("popPartial", Model)
         </fieldset>
     </form>
 </div>

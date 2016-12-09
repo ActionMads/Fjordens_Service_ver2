@@ -1,10 +1,9 @@
-﻿
-$(function () {
-    //Global var
+﻿$(function () {
+
     var currentEmployee = -1;
     var calLoading = true;
-    var sourceUrl = "/PostIt/GetPostIts";
-    var templateId = 0;
+    var sourceUrl = "/PostIt/GetTemplate";
+    var templateId = 1;
 
     var source = {
         url: sourceUrl,
@@ -45,7 +44,9 @@ $(function () {
             url: "/PostIt/DelPostIt",
             dataType: "json",
             contentType: "application/json",
-            data: {id: id},
+            data: {
+                id: id
+            },
             success: function (data) {
                 loadEvents();
             }
@@ -53,21 +54,17 @@ $(function () {
     }
 
     function closeForm() {
-        $("#eventPopUp").dialog("close");
-        $("#eventForm")[0].reset();
+        $("#editEventPopUp").dialog("close");
+        $("#editEventForm")[0].reset();
     }
 
     function getTemplateNo() {
-        if ($("#saveToTemp").prop("checked")) {
-            console.log($("#templatesList2").val());
-            return $("#templatesList2").val();
-        } else {
-            return 0;
-        }
+        console.log($("#editTemplatesList").val());
+        return $("#editTemplatesList").val();
     }
 
     function openEditEventPopup(id, templateNo) {
-        $("#eventPopUp").dialog({
+        $("#editEventPopUp").dialog({
             height: 550,
             width: 400,
             modal: true,
@@ -91,7 +88,7 @@ $(function () {
                         "note": $("#eventNote").val(),
                         "templateNo": templateNo,
                         "dayOfWeek": getDayOfWeek(start)
-                        
+
                     }
                     updateEvent(postItHelpModel);
                     closeForm();
@@ -105,13 +102,14 @@ $(function () {
     }
 
     function openCreateEventPopup() {
-        $("#eventPopUp").dialog({
+        $("#editEventPopUp").dialog({
             height: 550,
             width: 400,
             modal: true,
             title: "Opret begivenhed",
             buttons: {
                 "Gem": function () {
+                    var templateNo = getTemplateNo();
                     var start = moment($("#eventDate").val() + " " + $("#eventStartTime").val(), "DD/MM/YYYY HH:mm");
                     var end = moment($("#eventDate").val() + " " + $("#eventEndTime").val(), "DD/MM/YYYY HH:mm");
                     var postItHelpModel = {
@@ -122,9 +120,9 @@ $(function () {
                         "customerId": $("#customersList").val(),
                         "employeeId": $("#employeesList").val(),
                         "note": $("#eventNote").val(),
-                        "templateNo": 0,
+                        "templateNo": templateNo,
                     }
-                
+
                     console.log(postItHelpModel);
                     saveEvent(postItHelpModel);
                     closeForm();
@@ -149,16 +147,16 @@ $(function () {
                 employeeId: currentEmployee
             }
         }
-        $("#calendar").fullCalendar("removeEventSource", source);
-        $("#calendar").fullCalendar("removeEvents");
-        $("#calendar").fullCalendar("addEventSource", source);
-        $("#calendar").fullCalendar("refetchEvents");
+        $("#editCalendar").fullCalendar("removeEventSource", source);
+        $("#editCalendar").fullCalendar("removeEvents");
+        $("#editCalendar").fullCalendar("addEventSource", source);
+        $("#editCalendar").fullCalendar("refetchEvents");
     }
 
     function getDayOfWeek(date) {
         console.log((moment(date).format("ddd")));
         var formatDate = moment(date).format("ddd");
-        var startDate = $("#calendar").fullCalendar("getView").start;
+        var startDate = $("#editCalendar").fullCalendar("getView").start;
         var dayOfWeek = 0
         console.log(startDate.isoWeek())
         if (formatDate === "man") {
@@ -190,52 +188,22 @@ $(function () {
         return dayOfWeek;
     }
 
-    $("#addTemp").click(function () {
-        var templateData = {
-            "templateId": $("#templatesList").val(),
-            "start": $("#calendar").fullCalendar("getView").start._d,
-            "end": $("#calendar").fullCalendar("getView").end._d
-        };
-
-        $.ajax({
-            type: "Post",
-            url: "/PostIt/CreateTemplate",
-            dataType: "json",
-            contentType: "application/json",
-            data: JSON.stringify(templateData),
-            success: function(data){
-                loadEvents();
-            } 
-        });
-        
-    });
-
-    function changeCheckBox(kindOfClick) {
-        if (kindOfClick === "day") {
-            $("#checkbox1").show();
-            $("#checkbox2").hide();
-        } else {
-            $("#checkbox1").hide();
-            $("#checkbox2").show();
-        }
-    }
-
-    $("#calendar").fullCalendar({
+    $("#editCalendar").fullCalendar({
         header: {
-            left: "prev,next, today",
-            center: "title",
-            right: "month,agendaWeek,agendaTwoWeeks,agendaDay"
+            left: "",
+            center: "",
+            right: "editTemplate"
         },
         views: {
-            agendaTwoWeeks: {
+            editTemplate: {
                 type: "agenda",
                 duration: { weeks: 2 },
-                buttonText: "2 Uger"
-            },
+                buttonText: "Rediger templates"
+            }
         },
 
         lazyFetching: true,
-        defaultView: "agendaWeek",
+        defaultView: "editTemplate",
         editable: true,
         alldaySlot: false,
         selectable: true,
@@ -268,18 +236,28 @@ $(function () {
         },
         viewRender: function (view, element) {
             if (!calLoading) {
+                if (view.name === "editTemplate") {
+                    console.log(view.name);
+                    sourceUrl = "/PostIt/GetTemplate";
+                    templateId = templateId;
                     loadEvents();
                 }
             }
+
+        }
     });
-    calLoading = false;
+
     $("#eventDate").datepicker();
 
-    $("#employeesList2").change(function () {
+    $("#editEmployeesList2").change(function () {
         currentEmployee = $(this).val();
         console.log($(this).val());
         loadEvents();
         
     });
-    
+
+    $("#editTemplatesList").change(function () {
+        templateId = $(this).val();
+        loadEvents();
+    });
 });

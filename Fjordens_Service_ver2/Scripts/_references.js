@@ -1,6 +1,7 @@
 ﻿/// <autosync enabled="true" />
 /// <reference path="bootstrap.js" />
 /// <reference path="calendar/calendar.js" />
+/// <reference path="calendar/edittemplate.js" />
 /// <reference path="calendar/imageupload.js" />
 /// <reference path="fullcalendar.min.js" />
 /// <reference path="gcal.js" />

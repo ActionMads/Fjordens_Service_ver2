@@ -1,0 +1,16 @@
+﻿@model Fjordens_Service_ver2.ViewModels.HomeViewModel
+
+<label>Title</label><br />
+<input type="text" id="eventTitle" /><br />
+<label>Dato</label><br />
+<input type="text" id="eventDate" /><br />
+<label>Start tid</label><br />
+<input type="text" id="eventStartTime" /><br />
+<label>Slut tid</label><br />
+<input type="text" id="eventEndTime" /><br />
+<label>Virksomhed</label><br />
+@Html.DropDownList("CustomersList", new SelectList(@Model.Customers, "CustomerId", "Company"), new { @id = "customersList" })<br />
+<label>Medarbejder</label><br />
+@Html.DropDownList("EmployeeList", new SelectList(@Model.Employees, "EmployeeId", "Name"), new { @id = "employeesList" })<br />
+<label>Note</label><br />
+<textarea id="eventNote"></textarea><br />
