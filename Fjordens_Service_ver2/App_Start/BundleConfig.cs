@@ -10,7 +10,8 @@ namespace Fjordens_Service_ver2
         {
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
                         "~/Scripts/jquery-{version}.js",
-                        "~/Scripts/jquery-ui-{version}.js"
+                        "~/Scripts/jquery-ui-{version}.js",
+                        "~/Scripts/jquery.timepicker.js"
                         ));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
@@ -35,6 +36,7 @@ namespace Fjordens_Service_ver2
                       "~/Content/themes/base/all.css",
                       "~/Content/fullcalendar.css",
                       "~/Content/bootstrap.css",
+                      "~/Content/jquery.timepicker.css",
                       "~/Content/Site.css"
                       ));
         }

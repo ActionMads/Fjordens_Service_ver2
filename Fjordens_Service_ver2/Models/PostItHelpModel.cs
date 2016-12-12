@@ -27,5 +27,7 @@
         public int templateNo { get; set; }
 
         public int? templateId { get; set; }
+
+        public bool isAssigned { get; set; }
     }
 }

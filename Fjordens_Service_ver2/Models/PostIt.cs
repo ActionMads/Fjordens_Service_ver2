@@ -23,6 +23,8 @@ namespace Fjordens_Service_ver2.Models
 
         public int? TemplateId { get; set; }
 
+        public bool IsAssigned { get; set; }
+
         public int TemplateNo { get; set; }
 
         public DateTime CreatedDate { get; set; }

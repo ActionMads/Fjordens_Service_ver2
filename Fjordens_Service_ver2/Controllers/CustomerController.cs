@@ -78,17 +78,22 @@ namespace Fjordens_Service_ver2.Controllers
 
         // POST: Customer/Delete/5
         [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
+        public ActionResult Delete(int id)
         {
-            try
+            using (ICustomerRepository _customerRepo = new CustomerRepository(ApplicationDbContext.Create()))
+            using(IPostItRepository _postItRepo = new PostItRepository(ApplicationDbContext.Create()))
             {
-                // TODO: Add delete logic here
+                var postItsForCus = _postItRepo.AllForCustomer(id).ToList();
+                foreach(var postIt in postItsForCus)
+                {
+                    postIt.IsAssigned = false;
+                    _postItRepo.Update(postIt);
+                    _postItRepo.Save();
+                }
 
+                _customerRepo.Delete(id);
+                _customerRepo.Save();
                 return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
             }
         }
     }

@@ -14,6 +14,8 @@ namespace Fjordens_Service_ver2.DAL.Contracts
 
         IQueryable<PostIt> AllForTemplate(int id);
         IQueryable<PostIt> AllForEmployee(int employeeId, int templateId);
+        IQueryable<PostIt> AllForEmployee(int employeeId);
+        IQueryable<PostIt> AllForCustomer(int customerId);
         IQueryable<PostIt> AllIncluding(params Expression<Func<PostIt, object>>[] includeProperties);
         PostIt Find(int id);
         void Insert(PostIt postit);

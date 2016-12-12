@@ -33,6 +33,16 @@ namespace Fjordens_Service_ver2.DAL.Repositories
             return _context.PostIts.Where(x => x.EmployeeId == employeeId && x.TemplateNo == templateId);
         }
 
+        public IQueryable<PostIt> AllForEmployee(int employeeId)
+        {
+            return _context.PostIts.Where(x => x.EmployeeId == employeeId);
+        }
+
+        public IQueryable<PostIt> AllForCustomer(int customerId)
+        {
+            return _context.PostIts.Where(x => x.CustomerId == customerId);
+        }
+
         public IQueryable<PostIt> AllIncluding(params Expression<Func<PostIt, object>>[] includeProperties)
         {
             return includeProperties.Aggregate<Expression<Func<PostIt, object>>,
@@ -85,7 +95,6 @@ namespace Fjordens_Service_ver2.DAL.Repositories
             Dispose(true);
             GC.SuppressFinalize(this);
         }
-
 
     }
 }

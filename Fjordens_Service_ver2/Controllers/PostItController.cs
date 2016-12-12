@@ -34,6 +34,12 @@ namespace Fjordens_Service_ver2.Controllers
                     var customer = _customerRepository.Find(postIt.CustomerId);
                     var employee = _employeeRepository.Find(postIt.EmployeeId);
 
+                    var employeeName = "";
+                    if(employee != null)
+                    {
+                        employeeName = employee.Name;
+                    }
+
                     var postItHelpModel = new PostItHelpModel()
                     {
                         id = postIt.EventId,
@@ -44,8 +50,9 @@ namespace Fjordens_Service_ver2.Controllers
                         customerId = postIt.CustomerId,
                         employeeId = postIt.EmployeeId,
                         customerName = customer.Company,
-                        employeeName = employee.Name,
+                        employeeName = employeeName,
                         allDay = false,
+                        isAssigned = postIt.IsAssigned,
                         templateNo = postIt.TemplateNo,
                         templateId = postIt.TemplateId
                     };
@@ -101,7 +108,8 @@ namespace Fjordens_Service_ver2.Controllers
                         templateNo = id,
                         templateId = null,
                         allDay = false,
-                        dayOfWeek = postIt.DayOfWeek
+                        dayOfWeek = postIt.DayOfWeek,
+                        isAssigned = postIt.IsAssigned
                     };
                     postItsList.Add(newPostIt);
                 }
@@ -142,7 +150,8 @@ namespace Fjordens_Service_ver2.Controllers
                         TemplateNo = 0,
                         TemplateId = postIt.EventId,
                         CreatedDate = DateTime.Now,
-                        DayOfWeek = postIt.DayOfWeek
+                        DayOfWeek = postIt.DayOfWeek,
+                        IsAssigned = true
                     };
                     postItsList.Add(newPostIt);
                 }
@@ -182,6 +191,7 @@ namespace Fjordens_Service_ver2.Controllers
                     postIt.DayOfWeek = postItHelpModel.dayOfWeek;
                     postIt.Note = postItHelpModel.note;
                     postIt.TemplateNo = postItHelpModel.templateNo;
+                    postIt.IsAssigned = true;
                     _postItRepo.Update(postIt);
                     _postItRepo.Save();
                     return Json(true);
@@ -211,7 +221,8 @@ namespace Fjordens_Service_ver2.Controllers
                         TemplateNo = postItHelpModel.templateNo,
                         CreatedDate = DateTime.Now,
                         CustomerId = postItHelpModel.customerId,
-                        EmployeeId = postItHelpModel.employeeId
+                        EmployeeId = postItHelpModel.employeeId,
+                        IsAssigned = true
 
                     };
                     _postItRepo.Insert(postIt);

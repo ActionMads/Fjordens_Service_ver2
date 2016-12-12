@@ -106,7 +106,16 @@ namespace Fjordens_Service_ver2.Controllers
         public ActionResult Delete(int id)
         {
             using (IEmployeeRepository _employeeRepo = new EmployeeRepository(ApplicationDbContext.Create()))
+            using (IPostItRepository _postItRepo = new PostItRepository(ApplicationDbContext.Create()))
             {
+                var postItsForEmployee = _postItRepo.AllForEmployee(id).ToList();
+                foreach(var postIt in postItsForEmployee)
+                {
+                    postIt.IsAssigned = false;
+                    _postItRepo.Update(postIt);
+                    _postItRepo.Save();
+                }
+
                 _employeeRepo.Delete(id);
                 _employeeRepo.Save();
                 return RedirectToAction("Index");

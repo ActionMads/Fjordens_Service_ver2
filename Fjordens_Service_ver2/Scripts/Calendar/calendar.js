@@ -237,7 +237,7 @@ $(function () {
         lazyFetching: true,
         defaultView: "agendaWeek",
         editable: true,
-        alldaySlot: false,
+        allDaySlot: false,
         selectable: true,
         slotMinutes: 15,
         timezone: "UTC",
@@ -263,8 +263,13 @@ $(function () {
         },
         eventRender: function (event, element) {
             element.attr("title", event.note);
-            var color = getColor(event.employeeId)
-            element.css("background-color", color);
+            if (event.isAssigned) {
+                var color = getColor(event.employeeId)
+                element.css("background-color", color);
+            } else {
+                element.css("background-color", "red");
+            }
+            
         },
         viewRender: function (view, element) {
             if (!calLoading) {
@@ -274,6 +279,10 @@ $(function () {
     });
     calLoading = false;
     $("#eventDate").datepicker();
+
+    $("#eventStartTime").timepicker({ "timeFormat": "h:i" });
+
+    $("#eventEndTime").timepicker({ "timeFormat": "h:i" });
 
     $("#employeesList2").change(function () {
         currentEmployee = $(this).val();

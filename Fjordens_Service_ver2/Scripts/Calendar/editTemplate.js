@@ -135,7 +135,11 @@
     }
 
     function getColor(i) {
-        var colors = ["Blue", "Brown", "BlueViolet", "BurlyWood", "CadetBlue", "Chartreuse"];
+        var colors = [
+            "Blue", "Brown", "BlueViolet", "BurlyWood", "CadetBlue", "Chartreuse", "Chocolate", "Coral", "CornflowerBlue", "Cornsilk", "Crimson",
+            "Cyan", "DarkBlue", "DarkGoldenRod", "DarkGray", "DarkGrey", "DarkGreen", "DarkKhaki", "DarkMagneta", "DarkOliveGreen", "DarkOrange",
+
+            ];
         return colors[i];
     }
 
@@ -205,7 +209,7 @@
         lazyFetching: true,
         defaultView: "editTemplate",
         editable: true,
-        alldaySlot: false,
+        allDaySlot: false,
         selectable: true,
         slotMinutes: 15,
         timezone: "UTC",
@@ -231,8 +235,12 @@
         },
         eventRender: function (event, element) {
             element.attr("title", event.note);
-            var color = getColor(event.employeeId)
-            element.css("background-color", color);
+            if (event.isAssigned) {
+                var color = getColor(event.employeeId)
+                element.css("background-color", color);
+            } else {
+                element.css("background-color", "red");
+            }
         },
         viewRender: function (view, element) {
             if (!calLoading) {
@@ -248,6 +256,10 @@
     });
 
     $("#eventDate").datepicker();
+
+    $("#eventStartTime").timepicker({ "timeFormat": "h:i" });
+
+    $("#eventEndTime").timepicker({ "timeFormat": "h:i" });
 
     $("#editEmployeesList2").change(function () {
         currentEmployee = $(this).val();
