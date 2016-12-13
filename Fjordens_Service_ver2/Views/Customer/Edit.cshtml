@@ -8,6 +8,7 @@
 
 @using (Html.BeginForm("Edit", "Customer", FormMethod.Post))
 {
+    @Html.ValidationSummary(true)
     @Html.HiddenFor(m => m.CustomerId)
     @Html.Partial("_CustomerPartial", Model)
     <input type="submit" value="Gem"/>

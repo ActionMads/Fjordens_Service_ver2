@@ -4,6 +4,7 @@
     <div>
         @Html.Label("Virksomhed")
         @Html.TextBoxFor(m => m.Company)
+        @Html.ValidationMessageFor(m => m.Company)
     </div>
     <div>
         @Html.Label("Adresse")

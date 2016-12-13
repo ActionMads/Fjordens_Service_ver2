@@ -5,8 +5,9 @@
 
 <h2>"Opret kunde"</h2>
 
-@using (Html.BeginForm("Create", "Customer", FormMethod.Post))
+@using (Html.BeginForm("Create", "Customer", FormMethod.Post, new {@class = "col-lg-10 col-offset-1"}))
 {
+    @Html.ValidationSummary(true)
     @Html.Partial("_CustomerPartial")
 
     <input type="submit" value="Gem"/>

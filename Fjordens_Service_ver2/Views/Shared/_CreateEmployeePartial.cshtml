@@ -1,24 +1,25 @@
 ﻿@model Fjordens_Service_ver2.Models.Employee
 
 <div>
-    <div>
+    <div class="form-group">
         @Html.Label("Navn")
-        @Html.TextBoxFor(m => m.Name)
+        @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Name)
     </div>
-    <div>
+    <div class="form-group">
         @Html.Label("Addresse")
-        @Html.TextBoxFor(m => m.Address)
+        @Html.TextBoxFor(m => m.Address, new { @class = "form-control" })
     </div>
-    <div>
+    <div class="form-group">
         @Html.Label("Email")
-        @Html.TextBoxFor(m => m.Email)
+        @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
     </div>
-    <div>
+    <div class="form-group">
         @Html.Label("Telefon")
-        @Html.TextBoxFor(m => m.PhoneNumber)
+        @Html.TextBoxFor(m => m.PhoneNumber, new { @class = "form-control" })
     </div>
-    <div>
+    <div class="form-group">
         @Html.Label("Beskrivelse")
-        @Html.TextBoxFor(m => m.Description)
+        @Html.TextAreaFor(m => m.Description, new { @class = "form-control", @rows = "4"})
     </div>
 </div>

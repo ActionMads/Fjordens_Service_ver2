@@ -12,6 +12,7 @@
     <div>
         <h3>@customer.Company</h3>
         @Html.ActionLink("Rediger", "Edit", "Customer", new { id = customer.CustomerId}, null)
+        @Html.ActionLink("Slet", "Delete", "Customer", new { id = customer.CustomerId }, null)
         <h4>Info</h4>
         <label>Adresse: </label><label>@customer.Address</label><br />
         <label>Email: </label><label>@customer.Email</label><br />

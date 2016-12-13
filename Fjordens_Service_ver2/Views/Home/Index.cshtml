@@ -3,15 +3,39 @@
 @{
     ViewBag.Title = "Home Page";
 }
-@Html.DropDownList("TemplatesList", new SelectList(@Model.Templates, "TemplateId", "TemplateName"), new { @id = "templatesList" })
+<div class="container">
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="form-inline">
+                <div class="form-group">
+                    <label>Templates</label>
+                    @Html.DropDownList("TemplatesList", new SelectList(@Model.Templates, "TemplateId", "TemplateName"), new { @id = "templatesList", @class = "form-control" })
 
-<button id="addTemp">Opret template</button>
 
-@Html.ActionLink("Rediger Templates", "Index", "Template")
+                    <button id="addTemp" class="btn btn-default form-control">Opret template</button>
+                </div>
+                <div class="form-group">
+                    @Html.ActionLink("Rediger Templates", "Index", "Template", new { @class = "btn btn-default form-control" })
+                </div>
+            </div>
+        </div>
+          
+        <div class="col-lg-6">
+            <div class="form-inline">
+                <div class="form-group">
+                    <label>Medarbejdere</label>
+                    @Html.DropDownList("employeeList2", new SelectList(@Model.EmployeesList2, "Id", "Name"), new { @id = "employeesList2", @class = "form-control" })
+                </div>
+            </div>
+            
+        </div>
+            
+    </div>
+    
 
-@Html.DropDownList("employeeList2", new SelectList(@Model.EmployeesList2, "Id", "Name"), new { @id = "employeesList2"})
+    <div id="calendar"></div>
 
-<div id="calendar"></div>
+</div>
 
 <div id="eventPopUp" style="display: none" title="Ny begivenhed">
     <form id="eventForm">
@@ -22,5 +46,6 @@
 </div>
 
 @section Scripts{
+    <script src="~/Scripts/Calendar/sharedcalfuncs.js"></script>
     <script src="~/Scripts/Calendar/calendar.js"></script>
 }

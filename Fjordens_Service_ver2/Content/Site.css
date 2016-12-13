@@ -28,3 +28,10 @@ textarea {
     height: 150px;
     cursor: pointer;
 }
+
+.form-con{
+    border: 1px solid;
+    border-radius: 5px;
+    padding: 20px;
+    padding-left: 50px;
+}

@@ -8,6 +8,7 @@
 
 @using (Html.BeginForm("Update", "Employee", FormMethod.Post))
 {
+    @Html.ValidationSummary(true)
     @Html.HiddenFor(m => m.EmployeeId)
     @Html.Partial("_CreateEmployeePartial", Model)
     <input type="submit" value="Gem"/>

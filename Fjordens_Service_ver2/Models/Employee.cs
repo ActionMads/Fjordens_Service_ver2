@@ -10,7 +10,7 @@ namespace Fjordens_Service_ver2.Models
     {
         [Key]
         public int EmployeeId { get; set; }
-
+        [Required]
         public string Name { get; set; }
 
         public string Address { get; set; }
