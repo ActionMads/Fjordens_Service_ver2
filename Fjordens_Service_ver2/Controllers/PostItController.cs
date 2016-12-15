@@ -13,6 +13,8 @@ namespace Fjordens_Service_ver2.Controllers
     {
         public JsonResult GetPostIts(string start, string end, int id, int employeeId)
         {
+            var from = string.Format("YYYY-MM-DD HH:mm", start);
+            var to = string.Format("YYYY-MM-DD HH:mm", end);
             IQueryable<PostIt> postIts = null;
             List<PostItHelpModel> postItHelpModels = new List<PostItHelpModel>();
             using (IPostItRepository _postItRepository = new PostItRepository(ApplicationDbContext.Create()))
@@ -21,11 +23,11 @@ namespace Fjordens_Service_ver2.Controllers
             {
                 if(employeeId > -1)
                 {
-                    postIts = _postItRepository.AllForEmployee(employeeId, id);
+                    postIts = _postItRepository.AllForEmployee(from, to, employeeId, id);
                 }
                 else
                 {
-                    postIts = _postItRepository.AllForTemplate(id);
+                    postIts = _postItRepository.AllForTemplate(from, to, id);
 
                 }
 
@@ -65,6 +67,8 @@ namespace Fjordens_Service_ver2.Controllers
 
         public JsonResult GetTemplate(string start, string end, int id, int employeeId)
         {
+            var calFrom = string.Format("YYYY-MM-DD HH:mm", start);
+            var calTo = string.Format("YYYY-MM-DD HH:mm", end);
             IQueryable<PostIt> postIts = null;
             List<PostItHelpModel> postItsList = new List<PostItHelpModel>();
             using (IPostItRepository _postItRepository = new PostItRepository(ApplicationDbContext.Create()))

@@ -18,7 +18,7 @@ var $eventForm = null;
                 if (data) {
                     loadEvents();
                 } else {
-                    alert("Der gik noget galt! Check om du har udfyldt alle felter korrekt.")
+                    alert("Der gik noget galt! Check om alle felter er udfyldt korrekt.")
                 }
             }
         });
@@ -35,7 +35,7 @@ var $eventForm = null;
                 if (data) {
                     loadEvents();
                 } else {
-                    alert("Der gik noget galt! Check om du har udfyldt alle felter korrekt.")
+                    alert("Der gik noget galt! Check om alle felter er udfyldt korrekt.")
                 }
             }
         });
@@ -62,9 +62,69 @@ var $eventForm = null;
         $eventForm[0].reset();
     }
 
+    function dragNDrop(event) {
+            var postItHelpModel = {
+                id: event.id,
+                title: event.title,
+                start: event.start.format("YYYY-MM-DD HH:mm"),
+                end: event.end.format("YYYY-MM-DD HH:mm"),
+                customerId: event.customerId,
+                employeeId: event.employeeId,
+                note: event.note,
+                templateNo: event.templateNo,
+                dayOfWeek: getDayOfWeek(event.start)
+            };
+            updateEvent(postItHelpModel);
+    }
+
+    function setColors(event, element) {
+        if (event.isAssigned) {
+            var color = getColor(event.employeeId)
+            element.css("background-color", color);
+        } else {
+            element.css("background-color", "red");
+        }
+    }
+
+    function setAndOpenPopupDC(calEvent) {
+
+    }
+
+    function setAndOpenPopupEC(calEvent) {
+        $("#eventTitle").val(calEvent.title);
+        $('#eventDate').val(moment(calEvent.start).format('DD/MM/YYYY'));
+        $('#eventStartTime').val(moment(calEvent.start).format('HH:mm'));
+        $("#eventEndTime").val(moment(calEvent.end).format("HH:mm"));
+        console.log(calEvent.customerName);
+        console.log(calEvent.employeeName);
+        $("#customersList").val(calEvent.customerId);
+        $("#employeesList").val(calEvent.employeeId);
+        $("#eventNote").val(calEvent.note);
+        openEditEventPopup(calEvent.id, calEvent.templateNo);
+        console.log("event clicked!");
+    }
+
     function getColor(i) {
-        var colors = ["Blue", "Brown", "BlueViolet", "BurlyWood", "CadetBlue", "Chartreuse"];
-        return colors[i];
+        
+        var colors = ["BlanchedAlmond", "Blue", "BlueViolet",
+            "Brown", "BurlyWood", "CadetBlue", "Chartreuse", "Chocolate", "Coral", "CornflowerBlue", "Cornsilk", "Crimson", "Cyan", "DarkBlue", "DarkCyan",
+            "DarkGoldenRod", "DarkGray", "DarkGrey", "DarkGreen", "DarkKhaki", "DarkMagenta", "DarkOliveGreen", "Darkorange", "DarkOrchid", "DarkRed",
+            "DarkSalmon", "DarkSeaGreen", "DarkSlateBlue", "DarkSlateGray", "DarkSlateGrey", "DarkTurquoise", "DarkViolet", "DeepPink", "DeepSkyBlue",
+            "DimGray", "DimGrey", "DodgerBlue", "FireBrick", "FloralWhite", "ForestGreen", "Fuchsia", "Gainsboro", "GhostWhite", "Gold", "GoldenRod",
+            "Gray", "Grey", "Green", "GreenYellow", "HoneyDew", "HotPink", "IndianRed", "Indigo", "Ivory", "Khaki", "Lavender", "LavenderBlush",
+            "LawnGreen", "LemonChiffon", "LightBlue", "LightCoral", "LightCyan", "LightGoldenRodYellow", "LightGray", "LightGrey", "LightGreen",
+            "LightPink", "LightSalmon", "LightSeaGreen", "LightSkyBlue", "LightSlateGray", "LightSlateGrey", "LightSteelBlue", "LightYellow", "Lime",
+            "LimeGreen", "Linen", "Magenta", "Maroon", "MediumAquaMarine", "MediumBlue", "MediumOrchid", "MediumPurple", "MediumSeaGreen", "MediumSlateBlue",
+            "MediumSpringGreen", "MediumTurquoise", "MediumVioletRed", "MidnightBlue", "MintCream", "MistyRose", "Moccasin", "NavajoWhite", "Navy", "OldLace",
+            "Olive", "OliveDrab", "Orange", "OrangeRed", "Orchid", "PaleGoldenRod", "PaleGreen", "PaleTurquoise", "PaleVioletRed", "PapayaWhip", "PeachPuff",
+            "Peru", "Pink", "Plum", "PowderBlue", "Purple", "RosyBrown", "RoyalBlue", "SaddleBrown", "Salmon", "SandyBrown", "SeaGreen", "SeaShell",
+            "Sienna", "Silver", "SkyBlue", "SlateBlue", "SlateGray", "SlateGrey", "Snow", "SpringGreen", "SteelBlue", "Tan", "Teal", "Thistle", "Tomato",
+            "Turquoise", "Violet", "Wheat", "White", "WhiteSmoke", "Yellow", "YellowGreen"];
+        if (i >= colors.length) {
+            return colors[0];
+        } else {
+            return colors[i];
+        }
     }
 
     function loadEvents() {
@@ -142,7 +202,7 @@ var $eventForm = null;
                         "templateNo": templateNo,
                         "dayOfWeek": getDayOfWeek(start)
 
-                    }
+                    };
                     updateEvent(postItHelpModel);
                     closeForm();
                 },

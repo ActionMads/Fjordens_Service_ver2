@@ -23,6 +23,15 @@ namespace Fjordens_Service_ver2.DAL.Repositories
             return _context.PostIts;
         }
 
+        public IQueryable<PostIt> AllForTemplate(string from, string to, int id)
+        {
+            return _context.PostIts.Where(x => x.TemplateNo == id);
+        }
+
+        public IQueryable<PostIt> AllForEmployee(string from, string to, int employeeId, int templateId)
+        {
+            return _context.PostIts.Where(x => x.EmployeeId == employeeId && x.TemplateNo == templateId);
+        }
         public IQueryable<PostIt> AllForTemplate(int id)
         {
             return _context.PostIts.Where(x => x.TemplateNo == id);
@@ -32,7 +41,6 @@ namespace Fjordens_Service_ver2.DAL.Repositories
         {
             return _context.PostIts.Where(x => x.EmployeeId == employeeId && x.TemplateNo == templateId);
         }
-
         public IQueryable<PostIt> AllForEmployee(int employeeId)
         {
             return _context.PostIts.Where(x => x.EmployeeId == employeeId);
@@ -95,6 +103,7 @@ namespace Fjordens_Service_ver2.DAL.Repositories
             Dispose(true);
             GC.SuppressFinalize(this);
         }
+
 
     }
 }

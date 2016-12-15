@@ -18,15 +18,6 @@ $(function () {
         }
     };
 
-    function getTemplateNo() {
-        if ($("#saveToTemp").prop("checked")) {
-            console.log($("#templatesList2").val());
-            return $("#templatesList2").val();
-        } else {
-            return 0;
-        }
-    }
-
     $("#addTemp").click(function () {
         var templateData = {
             "templateId": $("#templatesList").val(),
@@ -66,43 +57,42 @@ $(function () {
         editable: true,
         allDaySlot: false,
         selectable: true,
-        slotMinutes: 15,
+        slotDuration: "00:30:00",
         timezone: "UTC",
         events: source,
         dayClick: function (date, jsEvent, view) {
             $('#eventDate').val(moment(date).format('DD/MM/YYYY'));
             $('#eventStartTime').val(moment(date).format('HH:mm'));
             openCreateEventPopup(0);
-            console.log("day clicked!");
         },
         eventClick: function (calEvent, jsEvent, view) {
-            $("#eventTitle").val(calEvent.title);
-            $('#eventDate').val(moment(calEvent.start).format('DD/MM/YYYY'));
-            $('#eventStartTime').val(moment(calEvent.start).format('HH:mm'));
-            $("#eventEndTime").val(moment(calEvent.end).format("HH:mm"));
-            console.log(calEvent.customerName);
-            console.log(calEvent.employeeName);
-            $("#customersList").val(calEvent.customerId);
-            $("#employeesList").val(calEvent.employeeId);
-            $("#eventNote").val(calEvent.note);
-            openEditEventPopup(calEvent.id, calEvent.templateNo);
-            console.log("event clicked!");
+            setAndOpenPopupEC(calEvent);
         },
         eventRender: function (event, element) {
             element.attr("title", event.note);
-            if (event.isAssigned) {
-                var color = getColor(event.employeeId)
-                element.css("background-color", color);
-            } else {
-                element.css("background-color", "red");
-            }
+            setColors(event, element);
             
         },
         viewRender: function (view, element) {
             if (!calLoading) {
                     loadEvents();
-                }
             }
+            console.log(view.name);
+            if (view.name == "month" || view.name == "agendaDay") {
+                $("#templatesList").hide();
+                $("#addTemp").hide();
+            } else {
+                $("#templatesList").show();
+                $("#addTemp").show();
+            }
+        },
+        eventDrop: function (event, delta, revertFunc) {
+            if (confirm("Vil du flytte begivenheden?")) {
+                dragNDrop(event);
+            } else {
+                revertFunc();
+            }
+        }
     });
     calLoading = false;
 
@@ -114,7 +104,6 @@ $(function () {
 
     $employeesList.change(function () {
         currentEmployee = $(this).val();
-        console.log($(this).val());
         loadEvents();
         
     });

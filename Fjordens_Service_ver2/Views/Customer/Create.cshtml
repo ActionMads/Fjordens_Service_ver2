@@ -2,13 +2,21 @@
 @{
     ViewBag.Title = "Create";
 }
+<div class="container">
+    <div class="row">
+        <h2 class="text-center">Opret kunde</h2>
+    </div>
+    <div class="row">
+        <div class="col-lg-4 col-lg-offset-4 col-md-4 col-md-offset-4 col-sm-4 col-md-offset-4 form-con">
+            <hr />
 
-<h2>"Opret kunde"</h2>
+            @using (Html.BeginForm("Create", "Customer", FormMethod.Post))
+            {
+                @Html.ValidationSummary(true)
+                @Html.Partial("_CustomerPartial")
 
-@using (Html.BeginForm("Create", "Customer", FormMethod.Post, new {@class = "col-lg-10 col-offset-1"}))
-{
-    @Html.ValidationSummary(true)
-    @Html.Partial("_CustomerPartial")
-
-    <input type="submit" value="Gem"/>
-}
+                <input type="submit" value="Gem" />
+            }
+        </div>
+    </div>
+</div>

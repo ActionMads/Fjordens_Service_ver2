@@ -2,22 +2,33 @@
 @{
     ViewBag.Title = "Rediger Template";
 }
+<div class="container">
+    <div class="row">
+        <div class="col-sm-7">
+            <div class="form-inline">
+                <label control-label>Templates:</label>
+                @Html.DropDownList("editTemplatesList", new SelectList(@Model.Templates, "TemplateId", "TemplateName"), new { @id = "editTemplatesList", @class="form-control" })
+            </div>
+        </div>
+        <div class="col-sm-5">
+            <div class="form-inline">
+                <label control-label>Medarbejdere</label>
+                @Html.DropDownList("editEmployeeList2", new SelectList(@Model.EmployeesList2, "Id", "Name"), new { @id = "editEmployeesList2", @class="form-control" })
+            </div>
+        </div>
+        <div id="editCalendar"></div>
 
-@Html.DropDownList("editTemplatesList", new SelectList(@Model.Templates, "TemplateId", "TemplateName"), new { @id = "editTemplatesList" })
+        <div id="editEventPopUp" style="display: none" title="Ny begivenhed">
+            <form id="editEventForm">
+                <fieldset>
+                    @Html.Partial("popPartial", Model)
+                </fieldset>
+            </form>
+        </div>
 
-@Html.DropDownList("editEmployeeList2", new SelectList(@Model.EmployeesList2, "Id", "Name"), new { @id = "editEmployeesList2" })
-
-<div id="editCalendar"></div>
-
-<div id="editEventPopUp" style="display: none" title="Ny begivenhed">
-    <form id="editEventForm">
-        <fieldset>
-            @Html.Partial("popPartial", Model)
-        </fieldset>
-    </form>
+        @section Scripts{
+            <script src="~/Scripts/Calendar/sharedcalfuncs.js"></script>
+            <script src="~/Scripts/Calendar/editTemplate.js"></script>
+        }
+    </div>
 </div>
-
-@section Scripts{
-    <script src="~/Scripts/Calendar/sharedcalfuncs.js"></script>
-    <script src="~/Scripts/Calendar/editTemplate.js"></script>
-}

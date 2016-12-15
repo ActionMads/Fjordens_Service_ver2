@@ -1,29 +1,29 @@
 ﻿@model Fjordens_Service_ver2.Models.Customer
 
 <div>
-    <div>
+    <div class="form-group">
         @Html.Label("Virksomhed")
-        @Html.TextBoxFor(m => m.Company)
+        @Html.TextBoxFor(m => m.Company, new { @class="form-control" })
         @Html.ValidationMessageFor(m => m.Company)
     </div>
-    <div>
+    <div class="form-group">
         @Html.Label("Adresse")
-        @Html.TextBoxFor(m => m.Address)
+        @Html.TextBoxFor(m => m.Address, new { @class = "form-control" })
     </div>
-    <div>
+    <div class="form-group">
         @Html.Label("Email")
-        @Html.TextBoxFor(m => m.Email)
+        @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
     </div>
-    <div>
+    <div class="form-group">
         @Html.Label("Telefon")
-        @Html.TextBoxFor(m => m.PhoneNumber)
+        @Html.TextBoxFor(m => m.PhoneNumber, new { @class = "form-control" })
     </div>
-    <div>
+    <div class="form-group">
         @Html.Label("Kontakt person")
-        @Html.TextBoxFor(m => m.ContactPerson)
+        @Html.TextBoxFor(m => m.ContactPerson, new { @class = "form-control" })
     </div>
-    <div>
+    <div class="form-group">
         @Html.Label("Opgaver")
-        @Html.TextAreaFor(m => m.Tasks)
+        @Html.TextAreaFor(m => m.Tasks, new { @class = "form-control" })
     </div>
 </div>

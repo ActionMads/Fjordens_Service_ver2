@@ -1,16 +1,30 @@
 ﻿@model Fjordens_Service_ver2.ViewModels.HomeViewModel
 
-<label>Title</label><br />
-<input type="text" id="eventTitle" /><br />
-<label>Dato</label><br />
-<input type="text" id="eventDate" /><br />
-<label>Start tid</label><br />
-<input type="text" id="eventStartTime" /><br />
-<label>Slut tid</label><br />
-<input type="text" id="eventEndTime" /><br />
-<label>Virksomhed</label><br />
-@Html.DropDownList("CustomersList", new SelectList(@Model.Customers, "CustomerId", "Company"), new { @id = "customersList" })<br />
-<label>Medarbejder</label><br />
-@Html.DropDownList("EmployeeList", new SelectList(@Model.Employees, "EmployeeId", "Name"), new { @id = "employeesList" })<br />
-<label>Note</label><br />
-<textarea id="eventNote"></textarea><br />
+<div class="form-group">
+    <label>Title</label>
+    <input class="form-control" type="text" id="eventTitle" />
+</div>
+<div class="form-group">
+    <label>Dato</label>
+    <input class="form-control" type="text" id="eventDate" />
+</div>
+<div class="form-group">
+    <label>Start tid</label>
+    <input class="form-control" type="text" id="eventStartTime" />
+</div>
+<div class="form-group">
+    <label>Slut tid</label>
+    <input class="form-control" type="text" id="eventEndTime" />
+</div>
+<div class="form-group">
+    <label>Virksomhed</label>
+    @Html.DropDownList("CustomersList", new SelectList(@Model.Customers, "CustomerId", "Company"), new { @id = "customersList", @class="form-control" })
+</div>
+<div class="form-group">
+    <label>Medarbejder</label><br />
+    @Html.DropDownList("EmployeeList", new SelectList(@Model.Employees, "EmployeeId", "Name"), new { @id = "employeesList", @class = "form-control" })
+</div>
+<div class="form-group">
+    <label>Note</label>
+    <textarea class="form-control" id="eventNote"></textarea>
+</div>

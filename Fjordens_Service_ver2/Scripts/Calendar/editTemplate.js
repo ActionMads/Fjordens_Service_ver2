@@ -6,6 +6,7 @@
     templateId = 1;
     $calendar = $("#editCalendar");
     $employeesList = $("#editEmployeesList2");
+    $templatesList = $("#editTemplatesList")
     $eventPopUp = $("#editEventPopUp");
     $eventForm = $("#editEventForm");
 
@@ -18,8 +19,8 @@
     };
 
     function getTemplateNo() {
-        console.log($("#editTemplatesList").val());
-        return $("#editTemplatesList").val();
+        console.log($templatesList.val());
+        return $templatesList.val();
     }
 
     $calendar.fullCalendar({
@@ -48,40 +49,25 @@
             $('#eventDate').val(moment(date).format('DD/MM/YYYY'));
             $('#eventStartTime').val(moment(date).format('HH:mm'));
             openCreateEventPopup(getTemplateNo());
-            console.log("day clicked!");
         },
         eventClick: function (calEvent, jsEvent, view) {
-            $("#eventTitle").val(calEvent.title);
-            $('#eventDate').val(moment(calEvent.start).format('DD/MM/YYYY'));
-            $('#eventStartTime').val(moment(calEvent.start).format('HH:mm'));
-            $("#eventEndTime").val(moment(calEvent.end).format("HH:mm"));
-            console.log(calEvent.customerName);
-            console.log(calEvent.employeeName);
-            $("#customersList").val(calEvent.customerId);
-            $("#employeesList").val(calEvent.employeeId);
-            $("#eventNote").val(calEvent.note);
-            openEditEventPopup(calEvent.id, calEvent.templateNo);
-            console.log("event clicked!");
+            setAndOpenPopupEC(calEvent);
         },
         eventRender: function (event, element) {
             element.attr("title", event.note);
-            if (event.isAssigned) {
-                var color = getColor(event.employeeId)
-                element.css("background-color", color);
-            } else {
-                element.css("background-color", "red");
-            }
+            setColors(event, element);
         },
         viewRender: function (view, element) {
             if (!calLoading) {
-                if (view.name === "editTemplate") {
-                    console.log(view.name);
-                    sourceUrl = "/PostIt/GetTemplate";
-                    templateId = templateId;
-                    loadEvents();
-                }
+                loadEvents();
             }
-
+        },
+        eventDrop: function (event, delta, revertFunc) {
+            if (confirm("Vil du flytte begivenheden?")) {
+                dragNDrop(event);
+            } else {
+                revertFunc();
+            }
         }
     });
 
@@ -93,11 +79,10 @@
 
     $employeesList.change(function () {
         currentEmployee = $(this).val();
-        console.log($(this).val());
         loadEvents();
     });
 
-    $("#editTemplatesList").change(function () {
+    $templatesList.change(function () {
         templateId = $(this).val();
         loadEvents();
     });
